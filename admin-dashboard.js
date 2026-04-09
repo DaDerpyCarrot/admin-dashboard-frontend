@@ -1,6 +1,6 @@
 console.log("admin-dashboard.js loaded");
 
-const API_BASE = "https://roadimentary-admin-dashboard.onrender.com/api/";
+const API_BASE = "https://roadimentary-admin-dashboard.onrender.com/api";
 const token = localStorage.getItem("adminToken");
 
 console.log("Dashboard token:", token);
