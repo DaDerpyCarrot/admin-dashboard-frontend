@@ -5,6 +5,14 @@ const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const statusText = document.getElementById("status");
 
+const isLocal =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1";
+
+const API_BASE = isLocal
+  ? "http://localhost:3000/api"
+  : "https://roadimentary-admin-dashboard.onrender.com/api";
+
 if (!loginBtn || !usernameInput || !passwordInput || !statusText) {
   console.error("Admin login page is missing required elements.");
 } else {
@@ -20,7 +28,7 @@ if (!loginBtn || !usernameInput || !passwordInput || !statusText) {
     statusText.textContent = "Logging in...";
 
     try {
-      const response = await fetch("https://roadimentary-admin-dashboard.onrender.com/api/admin/login", {
+      const response = await fetch(`${API_BASE}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -1,9 +1,14 @@
 console.log("admin-dashboard.js loaded");
 
-const API_BASE = "https://roadimentary-admin-dashboard.onrender.com/api";
-const token = localStorage.getItem("adminToken");
+const isLocal =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1";
 
-console.log("Dashboard token:", token);
+const API_BASE = isLocal
+  ? "http://localhost:3000/api"
+  : "https://roadimentary-admin-dashboard.onrender.com/api";
+
+const token = localStorage.getItem("adminToken");
 
 let currentPlayFabId = "";
 let currentPlayerListRows = [];
@@ -528,7 +533,7 @@ async function banPlayer() {
 
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("adminToken");
-  window.location.href = "./admin-login.html";
+  window.location.href = "./index.html";
 });
 
 if (loadPlayerListBtn) {
