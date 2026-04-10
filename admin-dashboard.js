@@ -707,11 +707,21 @@ function renderKeyValueData(container, data, useStatusPills = false) {
   container.innerHTML = "";
 
   const entries = Object.entries(data || {}).filter(([key]) => {
-    if (!useStatusPills) return true;
-
     const normalizedKey = String(key).toLowerCase();
-    return normalizedKey !== "moderationhistory";
+
+    if (useStatusPills) {
+      return normalizedKey !== "moderationhistory";
+    }
+
+    return ![
+      "adminnote",
+      "accountstatus",
+      "reviewstate",
+      "strikecount",
+      "moderationhistory"
+    ].includes(normalizedKey);
   });
+
   if (entries.length === 0) {
     clearContainer(container, "No data found.");
     return;
@@ -719,7 +729,7 @@ function renderKeyValueData(container, data, useStatusPills = false) {
 
   const pinnedOrder = useStatusPills
     ? ["AdminNote", "AccountStatus", "ReviewState", "StrikeCount"]
-    : ["AdminNote", "AccountStatus", "ReviewState", "StrikeCount"];
+    : [];
 
   const pinned = [];
   const remaining = [];
