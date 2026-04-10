@@ -1166,3 +1166,13 @@ pre {
 }
 
 /* ---------- END 19. BACK TO TOP BUTTON ---------- */
+
+/* =========================================================
+   20. DASHBOARD INITIAL LOAD VISIBILITY
+   ========================================================= */
+
+.admin-dashboard-hidden {
+  display: none;
+}
+
+/* ---------- END 19. DASHBOARD INITIAL LOAD VISIBILITY ---------- */

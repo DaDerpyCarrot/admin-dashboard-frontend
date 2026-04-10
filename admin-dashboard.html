@@ -24,7 +24,8 @@
 
   <p id="status">Loading dashboard...</p>
 
-  <div class="cards">
+  <div id="adminDashboardContent" class="admin-dashboard-hidden">
+    <div class="cards">
     <div class="card">
       <h2>Total Players</h2>
       <div class="value" id="totalPlayers">--</div>
@@ -44,203 +45,204 @@
       <h2>Server Status</h2>
       <div class="value" id="serverStatus">--</div>
     </div>
-  </div>
-
-<div class="panel admin-player-list-panel">
-  <h2>Player List</h2>
-
-  <div class="player-list-filters">
-    <input id="listSearchInput" type="text" placeholder="Filter by name or PlayFab ID" />
-
-    <select id="listAccountStatusFilter">
-      <option value="">All account statuses</option>
-      <option value="active">active</option>
-      <option value="review">review</option>
-      <option value="flagged">flagged</option>
-      <option value="banned">banned</option>
-      <option value="unknown">unknown</option>
-    </select>
-
-    <select id="listReviewStateFilter">
-      <option value="">All review states</option>
-      <option value="none">none</option>
-      <option value="pending">pending</option>
-      <option value="investigating">investigating</option>
-      <option value="resolved">resolved</option>
-      <option value="unknown">unknown</option>
-    </select>
-
-    <label class="checkbox-filter">
-      <input id="listFlaggedOnly" type="checkbox" />
-      <span>Flagged Only</span>
-    </label>
-
-    <label class="checkbox-filter">
-      <input id="listReviewedOnly" type="checkbox" />
-      <span>Reviewed Only</span>
-    </label>
-
-    <select id="listLimitFilter">
-      <option value="25">25 rows</option>
-      <option value="50" selected>50 rows</option>
-      <option value="100">100 rows</option>
-    </select>
-
-    <button id="loadPlayerListBtn">Load List</button>
-  </div>
-
-  <p id="playerListStatus"></p>
-
-  <div class="player-table-wrap">
-    <table class="player-table">
-      <thead>
-        <tr>
-          <th class="sortable-th" data-sort-key="displayName">Player</th>
-          <th class="sortable-th" data-sort-key="playFabId">PlayFab ID</th>
-          <th class="sortable-th" data-sort-key="accountStatus">Status</th>
-          <th class="sortable-th" data-sort-key="reviewState">Review</th>
-          <th class="sortable-th" data-sort-key="lastLogin">Last Login</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="playerListBody">
-        <tr>
-          <td colspan="6" class="empty-table">No players loaded yet.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-<div class="panel admin-search-panel">
-  <h2>Player Search</h2>
-
-  <div class="search-row">
-    <input id="searchInput" type="text" placeholder="Search by PlayFab ID or display name" />
-    <button id="searchBtn">Search</button>
-    <button id="refreshPlayersBtn">Refresh Player Cache</button>
-    <button id="recountFlagsBtn">Recount Admin Flags</button>
-  </div>
-
-  <p id="searchStatus"></p>
-  <div id="searchResults" class="search-results"></div>
-  <p id="playerStatus"></p>
-</div>
-
-<div class="admin-details-layout">
-  <div class="panel admin-profile-panel">
-    <h2>Profile</h2>
-
-    <div class="subpanel">
-      <div id="profileOutput" class="info-grid">
-        <div class="empty-state">No player loaded yet.</div>
-      </div>
     </div>
 
-    <div class="subpanel">
-      <h3>Segments</h3>
-      <div id="segmentsOutput" class="pill-list"></div>
-    </div>
-  </div>
+    <div class="panel admin-player-list-panel">
+      <h2>Player List</h2>
 
-  <div class="panel admin-stats-panel">
-    <h2>Statistics</h2>
+      <div class="player-list-filters">
+        <input id="listSearchInput" type="text" placeholder="Filter by name or PlayFab ID" />
 
-    <div class="subpanel">
-      <div id="statsOutput" class="info-grid">
-        <div class="empty-state">No player loaded yet.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel admin-userdata-panel">
-    <h2>Client/User Data</h2>
-
-    <div class="subpanel">
-      <div id="userDataOutput" class="info-grid">
-        <div class="empty-state">No player loaded yet.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel admin-internal-panel">
-    <h2>Internal/Admin Data</h2>
-
-    <div class="subpanel">
-      <div id="internalDataOutput" class="info-grid">
-        <div class="empty-state">No player loaded yet.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="panel">
-  <h2>Moderation History</h2>
-  <div id="moderationHistoryOutput" class="history-list">
-    <div class="empty-state">No moderation history yet.</div>
-  </div>
-</div>
-
-<div class="admin-action-panels">
-  <div class="panel">
-    <h2>Update Internal/Admin Data</h2>
-
-    <div class="admin-form-grid">
-      <div class="admin-form-field admin-form-field-wide">
-        <label for="adminNoteInput" class="admin-form-label">Admin Note</label>
-        <textarea id="adminNoteInput" placeholder="Write an internal note..."></textarea>
-      </div>
-
-      <div class="admin-form-field">
-        <label for="accountStatusInput" class="admin-form-label">Account Status</label>
-        <select id="accountStatusInput">
-          <option value="">Select account status</option>
+        <select id="listAccountStatusFilter">
+          <option value="">All account statuses</option>
           <option value="active">active</option>
           <option value="review">review</option>
           <option value="flagged">flagged</option>
           <option value="banned">banned</option>
+          <option value="unknown">unknown</option>
         </select>
-      </div>
 
-      <div class="admin-form-field">
-        <label for="reviewStateInput" class="admin-form-label">Review State</label>
-        <select id="reviewStateInput">
-          <option value="">Select review state</option>
+        <select id="listReviewStateFilter">
+          <option value="">All review states</option>
           <option value="none">none</option>
           <option value="pending">pending</option>
           <option value="investigating">investigating</option>
           <option value="resolved">resolved</option>
+          <option value="unknown">unknown</option>
         </select>
+
+        <label class="checkbox-filter">
+          <input id="listFlaggedOnly" type="checkbox" />
+          <span>Flagged Only</span>
+        </label>
+
+        <label class="checkbox-filter">
+          <input id="listReviewedOnly" type="checkbox" />
+          <span>Reviewed Only</span>
+        </label>
+
+        <select id="listLimitFilter">
+          <option value="25">25 rows</option>
+          <option value="50" selected>50 rows</option>
+          <option value="100">100 rows</option>
+        </select>
+
+        <button id="loadPlayerListBtn">Load List</button>
       </div>
 
-      <div class="admin-form-field admin-form-field-small">
-        <label for="strikeCountInput" class="admin-form-label">Strike Count</label>
-        <input id="strikeCountInput" type="number" min="0" placeholder="0" />
+      <p id="playerListStatus"></p>
+
+      <div class="player-table-wrap">
+        <table class="player-table">
+          <thead>
+            <tr>
+              <th class="sortable-th" data-sort-key="displayName">Player</th>
+              <th class="sortable-th" data-sort-key="playFabId">PlayFab ID</th>
+              <th class="sortable-th" data-sort-key="accountStatus">Status</th>
+              <th class="sortable-th" data-sort-key="reviewState">Review</th>
+              <th class="sortable-th" data-sort-key="lastLogin">Last Login</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="playerListBody">
+            <tr>
+              <td colspan="6" class="empty-table">No players loaded yet.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <button id="saveInternalBtn">Save Internal Data</button>
-  </div>
 
-  <div class="panel admin-ban-panel">
-    <h2>Ban Player</h2>
+    <div class="panel admin-search-panel">
+      <h2>Player Search</h2>
 
-    <div class="admin-form-field">
-      <label for="banReasonInput" class="admin-form-label">Reason</label>
-      <input id="banReasonInput" type="text" placeholder="Reason for ban" />
+      <div class="search-row">
+        <input id="searchInput" type="text" placeholder="Search by PlayFab ID or display name" />
+        <button id="searchBtn">Search</button>
+        <button id="refreshPlayersBtn">Refresh Player Cache</button>
+        <button id="recountFlagsBtn">Recount Admin Flags</button>
+      </div>
+
+      <p id="searchStatus"></p>
+      <div id="searchResults" class="search-results"></div>
+      <p id="playerStatus"></p>
     </div>
 
-    <div class="admin-form-field admin-form-field-small">
-      <label for="banDurationInput" class="admin-form-label">Duration (Hours)</label>
-      <input id="banDurationInput" type="number" placeholder="24" value="24" />
+    <div class="admin-details-layout">
+      <div class="panel admin-profile-panel">
+        <h2>Profile</h2>
+
+        <div class="subpanel">
+          <div id="profileOutput" class="info-grid">
+            <div class="empty-state">No player loaded yet.</div>
+          </div>
+        </div>
+
+        <div class="subpanel">
+          <h3>Segments</h3>
+          <div id="segmentsOutput" class="pill-list"></div>
+        </div>
+      </div>
+
+      <div class="panel admin-stats-panel">
+        <h2>Statistics</h2>
+
+        <div class="subpanel">
+          <div id="statsOutput" class="info-grid">
+            <div class="empty-state">No player loaded yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel admin-userdata-panel">
+        <h2>Client/User Data</h2>
+
+        <div class="subpanel">
+          <div id="userDataOutput" class="info-grid">
+            <div class="empty-state">No player loaded yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel admin-internal-panel">
+        <h2>Internal/Admin Data</h2>
+
+        <div class="subpanel">
+          <div id="internalDataOutput" class="info-grid">
+            <div class="empty-state">No player loaded yet.</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button id="banPlayerBtn">Ban Player</button>
-  </div>
-</div>
+    <div class="panel">
+      <h2>Moderation History</h2>
+      <div id="moderationHistoryOutput" class="history-list">
+        <div class="empty-state">No moderation history yet.</div>
+      </div>
+    </div>
 
-<button id="backToTopBtn" title="Go to top">↑</button>
+    <div class="admin-action-panels">
+      <div class="panel">
+        <h2>Update Internal/Admin Data</h2>
+
+        <div class="admin-form-grid">
+          <div class="admin-form-field admin-form-field-wide">
+            <label for="adminNoteInput" class="admin-form-label">Admin Note</label>
+            <textarea id="adminNoteInput" placeholder="Write an internal note..."></textarea>
+          </div>
+
+          <div class="admin-form-field">
+            <label for="accountStatusInput" class="admin-form-label">Account Status</label>
+            <select id="accountStatusInput">
+              <option value="">Select account status</option>
+              <option value="active">active</option>
+              <option value="review">review</option>
+              <option value="flagged">flagged</option>
+              <option value="banned">banned</option>
+            </select>
+          </div>
+
+          <div class="admin-form-field">
+            <label for="reviewStateInput" class="admin-form-label">Review State</label>
+            <select id="reviewStateInput">
+              <option value="">Select review state</option>
+              <option value="none">none</option>
+              <option value="pending">pending</option>
+              <option value="investigating">investigating</option>
+              <option value="resolved">resolved</option>
+            </select>
+          </div>
+
+          <div class="admin-form-field admin-form-field-small">
+            <label for="strikeCountInput" class="admin-form-label">Strike Count</label>
+            <input id="strikeCountInput" type="number" min="0" placeholder="0" />
+          </div>
+        </div>
+
+        <button id="saveInternalBtn">Save Internal Data</button>
+      </div>
+
+      <div class="panel admin-ban-panel">
+        <h2>Ban Player</h2>
+
+        <div class="admin-form-field">
+          <label for="banReasonInput" class="admin-form-label">Reason</label>
+          <input id="banReasonInput" type="text" placeholder="Reason for ban" />
+        </div>
+
+        <div class="admin-form-field admin-form-field-small">
+          <label for="banDurationInput" class="admin-form-label">Duration (Hours)</label>
+          <input id="banDurationInput" type="number" placeholder="24" value="24" />
+        </div>
+
+        <button id="banPlayerBtn">Ban Player</button>
+      </div>
+    </div>
+
+    <button id="backToTopBtn" title="Go to top">↑</button>
+  </div>
 
   <script src="./admin-dashboard.js"></script>
 </body>

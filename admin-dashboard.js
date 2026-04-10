@@ -9,6 +9,8 @@ const API_BASE = isLocal
   : "https://roadimentary-admin-dashboard.onrender.com/api";
 
 const token = localStorage.getItem("adminToken");
+const dashboardContent = document.getElementById("adminDashboardContent");
+
 
 console.log("Dashboard token:", token);
 
@@ -93,15 +95,15 @@ async function apiFetch(path, options = {}) {
     throw new Error(`Request failed with status ${response.status}, and response was not valid JSON.`);
   }
 
-  if (!response.ok) {
-    if (response.status === 401 || response.status === 403) {
-      localStorage.removeItem("adminToken");
-      window.location.replace("./admin-login.html");
-      throw new Error("Unauthorized.");
-    }
-
-    throw new Error(data.message || `Request failed with status ${response.status}.`);
+if (!response.ok) {
+  if (response.status === 401 || response.status === 403) {
+    localStorage.removeItem("adminToken");
+    window.location.replace("./admin-login.html");
+    throw new Error("Unauthorized.");
   }
+
+  throw new Error(data.message || `Request failed with status ${response.status}.`);
+}
 
   return data;
 }
@@ -373,6 +375,10 @@ async function loadDashboard() {
     playersReviewedEl.textContent = data.stats.playersReviewed;
     flaggedPlayersEl.textContent = data.stats.flaggedPlayers;
     serverStatusEl.textContent = data.stats.serverStatus;
+
+    if (dashboardContent) {
+      dashboardContent.classList.remove("admin-dashboard-hidden");
+    }
 
     statusText.textContent = "Dashboard loaded.";
   } catch (error) {
