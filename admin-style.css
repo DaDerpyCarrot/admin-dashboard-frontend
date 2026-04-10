@@ -11,6 +11,10 @@
   box-sizing: border-box;
 }
 
+.admin-dashboard-hidden {
+  visibility: hidden;
+}
+
 html,
 body {
   margin: 0;
@@ -576,7 +580,9 @@ button:active {
 }
 
 .player-table-wrap {
+  max-height: 420px;
   overflow-x: auto;
+  overflow-y: auto;
   background: rgba(0, 0, 0, 0.18);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -601,7 +607,13 @@ button:active {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #ffd36d;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(2, 53, 95, 0.986);
+}
+
+.player-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .player-table td {
@@ -813,6 +825,9 @@ pre {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
 .history-entry {
@@ -1101,3 +1116,53 @@ pre {
 }
 
 /* ---------- END 18. RESPONSIVE - SMALL ---------- */
+
+/* =========================================================
+   19. BACK TO TOP BUTTON
+   ========================================================= */
+
+#backToTopBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+
+  width: 48px;
+  height: 48px;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.4rem;
+  font-weight: 900;
+
+  color: #222;
+
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  background: repeating-linear-gradient(
+    45deg,
+    #f4b400,
+    #f4b400 15px,
+    #e5a800 15px,
+    #e5a800 30px
+  );
+
+  box-shadow: 0 5px 0 #222;
+  transition: all 0.2s ease;
+}
+
+#backToTopBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #222;
+}
+
+#backToTopBtn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #222;
+}
+
+/* ---------- END 19. BACK TO TOP BUTTON ---------- */

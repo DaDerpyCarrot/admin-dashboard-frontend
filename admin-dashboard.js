@@ -10,6 +10,15 @@ const API_BASE = isLocal
 
 const token = localStorage.getItem("adminToken");
 
+console.log("Dashboard token:", token);
+
+if (!token) {
+  console.warn("No token found.");
+  window.location.replace("./admin-login.html");
+} else {
+  document.body.classList.remove("admin-dashboard-hidden");
+}
+
 let currentPlayFabId = "";
 let currentPlayerListRows = [];
 let currentSort = {
@@ -64,10 +73,7 @@ const banDurationInput = document.getElementById("banDurationInput");
 
 const moderationHistoryOutput = document.getElementById("moderationHistoryOutput");
 
-if (!token) {
-  console.warn("No token found.");
-  statusText.textContent = "No admin token found. Please log in again.";
-}
+
 
 async function apiFetch(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
@@ -88,6 +94,12 @@ async function apiFetch(path, options = {}) {
   }
 
   if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("adminToken");
+      window.location.replace("./admin-login.html");
+      throw new Error("Unauthorized.");
+    }
+
     throw new Error(data.message || `Request failed with status ${response.status}.`);
   }
 
@@ -688,7 +700,12 @@ function renderStatistics(statistics) {
 function renderKeyValueData(container, data, useStatusPills = false) {
   container.innerHTML = "";
 
-  const entries = Object.entries(data || {});
+  const entries = Object.entries(data || {}).filter(([key]) => {
+    if (!useStatusPills) return true;
+
+    const normalizedKey = String(key).toLowerCase();
+    return normalizedKey !== "moderationhistory";
+  });
   if (entries.length === 0) {
     clearContainer(container, "No data found.");
     return;
@@ -747,3 +764,20 @@ if (token) {
 } else {
   statusText.textContent = "No admin token found. Please log in again.";
 }
+
+const backToTopBtn = document.getElementById("backToTopBtn");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 200) {
+    backToTopBtn.style.display = "flex";
+  } else {
+    backToTopBtn.style.display = "none";
+  }
+});
+
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
