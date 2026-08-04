@@ -3,28 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Roadimentary Admin Login</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Roadimentary Admin Access</title>
   <link rel="stylesheet" href="./admin-style.css" />
 </head>
-<body class="admin-login-body">
-  <div class="login-page">
-    <div class="login-card">
-      <h1>Admin Login</h1>
-
-      <div class="field">
-        <label for="username">Username</label>
-        <input id="username" type="text" placeholder="Enter admin username" />
+<body class="admin-login-body admin-entry-body">
+  <main class="admin-entry-page">
+    <section class="admin-entry-card" data-entry-state="loading" aria-labelledby="admin-entry-title">
+      <div class="admin-entry-badge" aria-hidden="true">
+        <span></span>
       </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Enter admin password" />
+      <p class="admin-entry-eyebrow">Roadimentary Operations</p>
+      <h1 id="admin-entry-title">Verifying Admin Access</h1>
+
+      <p id="status" class="admin-entry-status" role="status" aria-live="polite">
+        Checking your secure dashboard handoff...
+      </p>
+
+      <div class="admin-entry-progress" aria-hidden="true">
+        <span></span>
       </div>
 
-      <button id="login-btn">Log In</button>
-      <p id="status"></p>
-    </div>
-  </div>
+      <div class="admin-entry-actions">
+        <a
+          id="landing-login-link"
+          class="admin-entry-link"
+          href="https://roadimentary-website.onrender.com/?open=account&amp;destination=admin"
+        >
+          Return to Landing Page
+        </a>
+      </div>
+
+      <details class="admin-entry-fallback">
+        <summary>Temporary fallback access</summary>
+        <p>Use only while the landing-page handoff is being deployed and tested.</p>
+        <a href="./legacy-login.html">Open legacy administrator login</a>
+      </details>
+
+      <small>Authorized personnel only</small>
+    </section>
+  </main>
 
   <script src="./admin-login.js"></script>
 </body>

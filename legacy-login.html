@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Temporary Roadimentary Admin Login</title>
+  <link rel="stylesheet" href="./admin-style.css" />
+</head>
+<body class="admin-login-body">
+  <main class="login-page">
+    <section class="login-card" aria-labelledby="legacy-login-title">
+      <h1 id="legacy-login-title">Temporary Admin Login</h1>
+      <p class="legacy-login-notice">
+        This fallback will be removed after landing-page access is verified.
+      </p>
+
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" type="text" autocomplete="username" />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" />
+      </div>
+
+      <button id="login-btn" type="button">Log In</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <a class="legacy-back-link" href="./index.html">Return to secure entry</a>
+    </section>
+  </main>
+
+  <script src="./admin-password-login.js"></script>
+</body>
+</html>

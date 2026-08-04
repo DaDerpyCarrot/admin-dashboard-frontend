@@ -8,17 +8,33 @@ const API_BASE = isLocal
   ? "http://localhost:3000/api"
   : "https://roadimentary-admin-dashboard.onrender.com/api";
 
-const token = localStorage.getItem("adminToken");
+const LANDING_LOGIN_URL = isLocal
+  ? "http://127.0.0.1:5500/?open=account&destination=admin"
+  : "https://roadimentary-website.onrender.com/?open=account&destination=admin";
+
+const legacyToken = localStorage.getItem("adminToken");
+
+if (!sessionStorage.getItem("adminToken") && legacyToken) {
+  sessionStorage.setItem("adminToken", legacyToken);
+}
+
+localStorage.removeItem("adminToken");
+
+const token = sessionStorage.getItem("adminToken");
 const dashboardContent = document.getElementById("adminDashboardContent");
 
+function clearAdminSession() {
+  sessionStorage.removeItem("adminToken");
+  localStorage.removeItem("adminToken");
+}
 
-console.log("Dashboard token:", token);
+function returnToLandingLogin() {
+  clearAdminSession();
+  window.location.replace(LANDING_LOGIN_URL);
+}
 
 if (!token) {
-  console.warn("No token found.");
-  window.location.replace("./admin-login.html");
-} else {
-  document.body.classList.remove("admin-dashboard-hidden");
+  returnToLandingLogin();
 }
 
 let currentPlayFabId = "";
@@ -48,7 +64,17 @@ const logoutBtn = document.getElementById("logout-btn");
 const totalPlayersEl = document.getElementById("totalPlayers");
 const playersReviewedEl = document.getElementById("playersReviewed");
 const flaggedPlayersEl = document.getElementById("flaggedPlayers");
-const serverStatusEl = document.getElementById("serverStatus");
+const bannedPlayersEl = document.getElementById("bannedPlayers");
+
+const summaryCards = document.querySelectorAll("[data-summary-type]");
+const summaryDetailPanel = document.getElementById("summaryDetailPanel");
+const summaryDetailTitle = document.getElementById("summaryDetailTitle");
+const summaryDetailDescription = document.getElementById("summaryDetailDescription");
+const summaryDetailBody = document.getElementById("summaryDetailBody");
+const summaryDetailStatus = document.getElementById("summaryDetailStatus");
+const summaryApplyFilterBtn = document.getElementById("summaryApplyFilterBtn");
+
+let currentSummaryType = "players";
 
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
@@ -97,8 +123,7 @@ async function apiFetch(path, options = {}) {
 
 if (!response.ok) {
   if (response.status === 401 || response.status === 403) {
-    localStorage.removeItem("adminToken");
-    window.location.replace("./admin-login.html");
+    returnToLandingLogin();
     throw new Error("Unauthorized.");
   }
 
@@ -374,7 +399,8 @@ async function loadDashboard() {
     totalPlayersEl.textContent = data.stats.totalPlayers;
     playersReviewedEl.textContent = data.stats.playersReviewed;
     flaggedPlayersEl.textContent = data.stats.flaggedPlayers;
-    serverStatusEl.textContent = data.stats.serverStatus;
+
+    await updateBannedPlayersCount();
 
     if (dashboardContent) {
       dashboardContent.classList.remove("admin-dashboard-hidden");
@@ -386,6 +412,170 @@ async function loadDashboard() {
     statusText.textContent = `Dashboard failed to load: ${error.message}`;
   }
 }
+
+const summaryFilters = {
+  players: {
+    label: "Players",
+    description: "All cached players currently available to the admin dashboard.",
+    accountStatus: "",
+    reviewState: "",
+    flaggedOnly: false,
+    reviewedOnly: false
+  },
+  reviewed: {
+    label: "Reviewed Players",
+    description: "Players marked as reviewed by admin moderation data.",
+    accountStatus: "",
+    reviewState: "",
+    flaggedOnly: false,
+    reviewedOnly: true
+  },
+  flagged: {
+    label: "Flagged Players",
+    description: "Players currently marked for moderation attention.",
+    accountStatus: "",
+    reviewState: "",
+    flaggedOnly: true,
+    reviewedOnly: false
+  },
+  banned: {
+    label: "Banned Players",
+    description: "Players whose account status is currently banned.",
+    accountStatus: "banned",
+    reviewState: "",
+    flaggedOnly: false,
+    reviewedOnly: false
+  }
+};
+
+function getSummaryConfig(type) {
+  return summaryFilters[type] || summaryFilters.players;
+}
+
+function buildPlayerListParamsFromConfig(config, limit = "50") {
+  return new URLSearchParams({
+    q: "",
+    accountStatus: config.accountStatus,
+    reviewState: config.reviewState,
+    flaggedOnly: config.flaggedOnly ? "true" : "false",
+    reviewedOnly: config.reviewedOnly ? "true" : "false",
+    limit
+  });
+}
+
+async function fetchSummaryPlayers(type, limit = "50") {
+  const config = getSummaryConfig(type);
+  const params = buildPlayerListParamsFromConfig(config, limit);
+  return apiFetch(`/admin/player-list?${params.toString()}`);
+}
+
+async function updateBannedPlayersCount() {
+  if (!bannedPlayersEl) return;
+
+  try {
+    const data = await fetchSummaryPlayers("banned", "25");
+    bannedPlayersEl.textContent = data.filtered ?? (data.players || []).length;
+  } catch (error) {
+    console.error("Banned player count failed:", error);
+    bannedPlayersEl.textContent = "--";
+  }
+}
+
+function setActiveSummaryCard(type) {
+  summaryCards.forEach(card => {
+    card.classList.toggle("active", card.dataset.summaryType === type);
+  });
+}
+
+function renderSummaryDetailRows(type, data) {
+  const players = data.players || [];
+  summaryDetailBody.innerHTML = "";
+
+  if (players.length === 0) {
+    summaryDetailBody.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty-table">No players found for this summary.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  players.forEach(player => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td class="player-name-cell">${player.displayName || "Unnamed Player"}</td>
+      <td class="player-id-cell">${player.playFabId}</td>
+      <td>${createStatusPillHtml(player.accountStatus)}</td>
+      <td>${createStatusPillHtml(player.reviewState)}</td>
+      <td>${formatDateShort(player.lastLogin)}</td>
+      <td><button class="summary-load-player-btn" type="button">Load</button></td>
+    `;
+
+    const loadButton = row.querySelector("button");
+    loadButton.addEventListener("click", async () => {
+      await loadPlayer(player.playFabId);
+      scrollToPlayerManagement();
+    });
+
+    summaryDetailBody.appendChild(row);
+  });
+}
+
+async function loadSummaryDetail(type) {
+  if (!summaryDetailPanel || !summaryDetailBody) return;
+
+  currentSummaryType = type;
+  const config = getSummaryConfig(type);
+
+  setActiveSummaryCard(type);
+  summaryDetailPanel.hidden = false;
+  summaryDetailTitle.textContent = config.label;
+  summaryDetailDescription.textContent = config.description;
+  summaryDetailStatus.textContent = `Loading ${config.label.toLowerCase()}...`;
+
+  try {
+    const data = await fetchSummaryPlayers(type, "50");
+    renderSummaryDetailRows(type, data);
+    summaryDetailStatus.textContent =
+      `Showing ${(data.players || []).length} of ${data.filtered} matching players.`;
+  } catch (error) {
+    console.error(error);
+    summaryDetailStatus.textContent = error.message;
+    summaryDetailBody.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty-table">Unable to load summary details.</td>
+      </tr>
+    `;
+  }
+}
+
+function applySummaryFiltersToPlayerList(type) {
+  const config = getSummaryConfig(type);
+
+  listSearchInput.value = "";
+  listAccountStatusFilter.value = config.accountStatus;
+  listReviewStateFilter.value = config.reviewState;
+  listFlaggedOnly.checked = config.flaggedOnly;
+  listReviewedOnly.checked = config.reviewedOnly;
+  listLimitFilter.value = "50";
+}
+
+function scrollToPlayerManagement() {
+  const target = document.querySelector(".admin-player-management");
+  if (!target) return;
+
+  target.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+async function loadSummaryIntoPlayerList(type = currentSummaryType) {
+  applySummaryFiltersToPlayerList(type);
+  await loadPlayerList();
+  scrollToPlayerManagement();
+}
+
 
 async function refreshPlayers() {
   searchStatus.textContent = "Refreshing player cache...";
@@ -550,15 +740,24 @@ async function banPlayer() {
 }
 
 logoutBtn.addEventListener("click", () => {
-  localStorage.removeItem("adminToken");
-  window.location.href = "./index.html";
+  returnToLandingLogin();
 });
 
 if (loadPlayerListBtn) {
   loadPlayerListBtn.addEventListener("click", loadPlayerList);
 }
 
+summaryCards.forEach(card => {
+  card.addEventListener("click", () => {
+    loadSummaryDetail(card.dataset.summaryType);
+  });
+});
 
+if (summaryApplyFilterBtn) {
+  summaryApplyFilterBtn.addEventListener("click", () => {
+    loadSummaryIntoPlayerList(currentSummaryType);
+  });
+}
 
 searchBtn.addEventListener("click", searchPlayers);
 
@@ -775,11 +974,19 @@ function renderKeyValueData(container, data, useStatusPills = false) {
   });
 }
 
-if (token) {
-  loadDashboard();
-} else {
-  statusText.textContent = "No admin token found. Please log in again.";
+async function initializeDashboardSession() {
+  if (!token) return;
+
+  try {
+    await apiFetch("/admin/me");
+    document.body.classList.remove("admin-dashboard-hidden");
+    await loadDashboard();
+  } catch (error) {
+    console.error("Could not initialize the admin dashboard:", error);
+  }
 }
+
+initializeDashboardSession();
 
 const backToTopBtn = document.getElementById("backToTopBtn");
 
