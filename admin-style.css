@@ -2176,3 +2176,740 @@ textarea::placeholder {
 
 /* ---------- END 24. SECURE ADMIN ENTRY GATEWAY ---------- */
 
+
+/* =========================================================
+   25. BEAVER SITE OFFICE — ADMIN DASHBOARD
+   Scoped to the authenticated dashboard so the secure entry
+   gateway and legacy login fallback keep their own styling.
+   ========================================================= */
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("./fonts/Lexend-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+.admin-dashboard-body {
+  --office-timber: #cda56d;
+  --office-timber-deep: #875a34;
+  --office-paper: #f7e8c1;
+  --office-paper-light: #fff5d9;
+  --office-paper-muted: #ead5a8;
+  --office-teal: #367778;
+  --office-teal-deep: #285d60;
+  --office-yellow: #e4a72a;
+  --office-yellow-light: #f3c853;
+  --office-walnut: #4b2b1a;
+  --office-copy: #664732;
+  --office-green: #4f7a55;
+  --office-red: #a7483f;
+  --office-shadow: rgba(60, 35, 20, 0.3);
+  --office-wood-bg:
+    radial-gradient(ellipse at 14% 18%, transparent 0 18px, rgba(91, 52, 27, 0.1) 19px 20px, transparent 21px),
+    radial-gradient(ellipse at 76% 64%, transparent 0 14px, rgba(91, 52, 27, 0.075) 15px 16px, transparent 17px),
+    repeating-linear-gradient(2deg, transparent 0 16px, rgba(91, 52, 27, 0.09) 17px, transparent 18px 34px),
+    linear-gradient(145deg, rgba(255, 233, 188, 0.28), rgba(153, 98, 47, 0.13)),
+    var(--office-timber);
+  --office-paper-bg:
+    repeating-linear-gradient(2deg, transparent 0 17px, rgba(103, 66, 34, 0.035) 18px, transparent 19px 36px),
+    linear-gradient(145deg, var(--office-paper-light), var(--office-paper));
+
+  --admin-font-heading: "Montserrat", "Segoe UI", sans-serif;
+  --admin-font-body: "Lexend", "Segoe UI", sans-serif;
+  --admin-font-data: "Lexend", "Segoe UI", sans-serif;
+  --admin-text-strong: var(--office-walnut);
+  --admin-text-main: var(--office-copy);
+  --admin-text-soft: #77553c;
+  --admin-text-muted: #886c55;
+  --admin-text-metal: #322319;
+  --admin-accent-text: var(--office-teal-deep);
+  --admin-accent-soft: var(--office-teal);
+
+  padding: 96px clamp(12px, 2.2vw, 34px) 34px;
+  color: var(--office-copy);
+  font-family: var(--admin-font-body);
+  background:
+    linear-gradient(rgba(236, 211, 164, 0.12), rgba(49, 31, 20, 0.26)),
+    url("/assets/background1.png") center/cover no-repeat fixed;
+}
+
+.admin-dashboard-body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(32, 76, 77, 0.08), transparent 22% 78%, rgba(32, 76, 77, 0.08)),
+    rgba(33, 22, 15, 0.08);
+}
+
+.admin-dashboard-body ::selection {
+  color: var(--office-walnut);
+  background: rgba(228, 167, 42, 0.55);
+}
+
+/* Office taskbar */
+
+.admin-dashboard-body #admin-taskbar {
+  height: 68px;
+  overflow: visible;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.1), rgba(38, 58, 67, 0.08)),
+    url("/assets/hbg2.png") center/auto 100% repeat-x;
+  border-bottom: 5px solid var(--office-yellow);
+  box-shadow:
+    0 3px 0 var(--office-teal-deep),
+    0 8px 22px rgba(39, 25, 16, 0.3);
+}
+
+.admin-dashboard-body #admin-logo-wrap {
+  left: clamp(12px, 2vw, 28px);
+}
+
+.admin-dashboard-body #admin-logo {
+  height: 39px;
+}
+
+.admin-dashboard-body #admin-title {
+  padding: 8px 26px 7px;
+  color: var(--office-walnut);
+  font-family: var(--admin-font-heading);
+  font-size: 0.93rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-shadow: none;
+  background: var(--office-paper-bg);
+  border: 2px solid var(--office-teal-deep);
+  border-top: 5px solid var(--office-yellow);
+  border-radius: 4px;
+  box-shadow: 0 4px 0 rgba(65, 41, 23, 0.38);
+}
+
+.admin-dashboard-body #admin-top-actions {
+  right: clamp(12px, 2vw, 28px);
+}
+
+.admin-dashboard-body #logout-btn {
+  min-height: 40px;
+  padding: 9px 18px;
+  color: #fff4e6;
+  background: linear-gradient(#b65c50, var(--office-red));
+  border: 2px solid #71302b;
+  box-shadow: 0 4px 0 #71302b;
+}
+
+.admin-dashboard-body #logout-btn:hover {
+  box-shadow: 0 6px 0 #71302b;
+}
+
+/* Field-office sign */
+
+.admin-dashboard-body .admin-hero {
+  margin: 0 auto 18px;
+}
+
+.admin-dashboard-body .admin-office-sign {
+  position: relative;
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 18px 66px 16px;
+  color: var(--office-walnut);
+  text-align: center;
+  background: var(--office-paper-bg);
+  border: 3px solid var(--office-teal-deep);
+  border-top: 8px solid var(--office-yellow);
+  border-radius: 7px;
+  box-shadow:
+    0 0 0 4px rgba(247, 232, 193, 0.58),
+    0 12px 28px var(--office-shadow);
+  transform: rotate(-0.25deg);
+}
+
+.admin-dashboard-body .admin-office-sign::before,
+.admin-dashboard-body .admin-office-sign::after {
+  content: "";
+  position: absolute;
+  top: 17px;
+  width: 11px;
+  height: 11px;
+  background: #aeb8b8;
+  border: 2px solid #53666b;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65);
+}
+
+.admin-dashboard-body .admin-office-sign::before {
+  left: 18px;
+}
+
+.admin-dashboard-body .admin-office-sign::after {
+  right: 18px;
+}
+
+.admin-dashboard-body .admin-office-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--office-teal-deep);
+  font-family: var(--admin-font-heading);
+  font-size: 0.65rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-dashboard-body .admin-subtitle {
+  display: block;
+  margin: 0;
+  padding: 0;
+  color: var(--office-walnut);
+  font-family: var(--admin-font-heading);
+  font-size: clamp(1.15rem, 2.2vw, 1.62rem);
+  font-weight: 900;
+  letter-spacing: 0.055em;
+  line-height: 1.1;
+  text-shadow: none;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.admin-dashboard-body .admin-subtitle::before,
+.admin-dashboard-body .admin-subtitle::after {
+  content: none;
+}
+
+.admin-dashboard-body .admin-office-note {
+  margin: 7px 0 0;
+  color: var(--office-copy);
+  font-size: 0.79rem;
+  font-weight: 600;
+}
+
+/* Main timber work surface */
+
+.admin-dashboard-body #adminDashboardContent {
+  width: min(1520px, 100%);
+  max-width: none;
+  padding: clamp(16px, 2vw, 28px);
+  background: var(--office-wood-bg);
+  border: 4px solid #6b4328;
+  border-top: 9px solid var(--office-yellow);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 231, 184, 0.2),
+    0 18px 42px rgba(43, 25, 14, 0.38);
+}
+
+.admin-dashboard-body .dashboard-summary-section {
+  margin-bottom: 24px;
+}
+
+.admin-dashboard-body .dashboard-summary-heading,
+.admin-dashboard-body .admin-player-management-header {
+  position: relative;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 15px 18px 14px;
+  color: var(--office-walnut);
+  background: var(--office-paper-bg);
+  border: 2px solid var(--office-teal);
+  border-left: 8px solid var(--office-yellow);
+  border-radius: 6px;
+  box-shadow: 0 7px 16px rgba(60, 35, 20, 0.2);
+}
+
+.admin-dashboard-body .dashboard-summary-heading h2,
+.admin-dashboard-body .admin-player-management-header h2 {
+  color: var(--office-walnut);
+  font-size: 1.08rem;
+  text-shadow: none;
+}
+
+.admin-dashboard-body .dashboard-summary-heading h2::before {
+  content: "Daily site report / ";
+  color: var(--office-teal-deep);
+  font-size: 0.62em;
+}
+
+.admin-dashboard-body .admin-player-management-header h2::before {
+  content: "Personnel desk / ";
+  color: var(--office-teal-deep);
+  font-size: 0.62em;
+}
+
+.admin-dashboard-body .dashboard-summary-heading p,
+.admin-dashboard-body .admin-player-management-header p {
+  color: var(--office-copy);
+  font-size: 0.9rem;
+  font-weight: 550;
+  text-shadow: none;
+  opacity: 1;
+}
+
+/* Summary file cards */
+
+.admin-dashboard-body .dashboard-summary-cards {
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.admin-dashboard-body .summary-card {
+  position: relative;
+  min-height: 126px;
+  margin: 0;
+  padding: 22px 18px 17px;
+  overflow: hidden;
+  color: var(--office-walnut);
+  background: var(--office-paper-bg);
+  border: 3px solid var(--office-teal);
+  border-top: 7px solid var(--office-yellow);
+  border-radius: 7px;
+  box-shadow: 0 10px 22px var(--office-shadow);
+}
+
+.admin-dashboard-body .summary-card::before {
+  content: attr(data-summary-type);
+  position: absolute;
+  right: 13px;
+  bottom: 10px;
+  color: rgba(75, 43, 26, 0.28);
+  font-family: var(--admin-font-heading);
+  font-size: 0.61rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.admin-dashboard-body .summary-card[data-summary-type="reviewed"] {
+  border-color: var(--office-green);
+}
+
+.admin-dashboard-body .summary-card[data-summary-type="flagged"] {
+  border-color: #b87a24;
+}
+
+.admin-dashboard-body .summary-card[data-summary-type="banned"] {
+  border-color: var(--office-red);
+}
+
+.admin-dashboard-body .summary-card h2,
+.admin-dashboard-body .cards .summary-card h2 {
+  color: var(--office-copy);
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+}
+
+.admin-dashboard-body .summary-card .value {
+  margin-top: 12px;
+  color: var(--office-teal-deep);
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  text-shadow: none;
+}
+
+.admin-dashboard-body .summary-card[data-summary-type="reviewed"] .value {
+  color: var(--office-green);
+}
+
+.admin-dashboard-body .summary-card[data-summary-type="flagged"] .value {
+  color: #9a611a;
+}
+
+.admin-dashboard-body .summary-card[data-summary-type="banned"] .value {
+  color: var(--office-red);
+}
+
+.admin-dashboard-body .summary-card:hover {
+  filter: brightness(1.02);
+  transform: translateY(-3px) rotate(-0.15deg);
+  box-shadow: 0 14px 25px rgba(60, 35, 20, 0.34);
+}
+
+.admin-dashboard-body .summary-card.active {
+  border-color: var(--office-teal-deep);
+  box-shadow:
+    inset 0 0 0 3px rgba(228, 167, 42, 0.3),
+    0 12px 25px rgba(60, 35, 20, 0.34);
+}
+
+/* Shared office reports */
+
+.admin-dashboard-body :is(.panel, .subpanel, .search-result) {
+  color: var(--office-copy);
+  background: var(--office-paper-bg);
+  border: 3px solid var(--office-teal);
+  border-top: 7px solid var(--office-yellow);
+  border-radius: 7px;
+  box-shadow: 0 10px 24px var(--office-shadow);
+}
+
+.admin-dashboard-body :is(.panel, .subpanel) :is(h2, h3) {
+  color: var(--office-walnut);
+  text-shadow: none;
+}
+
+.admin-dashboard-body .summary-detail-panel {
+  padding: clamp(16px, 2vw, 24px);
+  transform: rotate(0.08deg);
+}
+
+.admin-dashboard-body .summary-detail-header p,
+.admin-dashboard-body .admin-selected-title p {
+  color: var(--office-copy);
+}
+
+.admin-dashboard-body #summaryDetailStatus:not(:empty),
+.admin-dashboard-body :is(#status, #playerStatus, #searchStatus, #playerListStatus):not(:empty) {
+  color: var(--office-walnut);
+  text-shadow: none;
+  background: rgba(255, 244, 211, 0.88);
+  border: 2px solid rgba(54, 119, 120, 0.45);
+  border-left: 6px solid var(--office-yellow);
+  box-shadow: 0 4px 10px rgba(60, 35, 20, 0.15);
+}
+
+/* Forms and hardware */
+
+.admin-dashboard-body :is(input, textarea, select) {
+  color: var(--office-walnut);
+  background: rgba(255, 249, 227, 0.94);
+  border: 2px solid rgba(54, 119, 120, 0.58);
+  border-radius: 5px;
+  box-shadow:
+    inset 0 2px 4px rgba(87, 54, 28, 0.09),
+    0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.admin-dashboard-body :is(input, textarea, select):focus {
+  outline: 3px solid rgba(228, 167, 42, 0.42);
+  border-color: var(--office-teal-deep);
+}
+
+.admin-dashboard-body :is(input, textarea)::placeholder {
+  color: rgba(102, 71, 50, 0.62);
+}
+
+.admin-dashboard-body button {
+  color: #3f2a18;
+  background: linear-gradient(#f2c451, var(--office-yellow));
+  border: 2px solid #8b5d1e;
+  border-radius: 5px;
+  box-shadow: 0 4px 0 #744a19;
+}
+
+.admin-dashboard-body button:hover {
+  filter: brightness(1.04);
+  box-shadow: 0 6px 0 #744a19;
+}
+
+.admin-dashboard-body button:active {
+  box-shadow: 0 2px 0 #744a19;
+}
+
+.admin-dashboard-body :is(#refreshPlayersBtn, #recountFlagsBtn, #summaryApplyFilterBtn) {
+  color: #fff8e9;
+  background: linear-gradient(#46898a, var(--office-teal-deep));
+  border-color: #19494b;
+  box-shadow: 0 4px 0 #19494b;
+}
+
+.admin-dashboard-body :is(#refreshPlayersBtn, #recountFlagsBtn, #summaryApplyFilterBtn):hover {
+  box-shadow: 0 6px 0 #19494b;
+}
+
+.admin-dashboard-body :is(#banPlayerBtn) {
+  color: #fff7eb;
+  background: linear-gradient(#bc5d52, var(--office-red));
+  border-color: #71302b;
+  box-shadow: 0 4px 0 #71302b;
+}
+
+/* Tables become clipped paper ledgers. */
+
+.admin-dashboard-body :is(.summary-detail-table-wrap, .player-table-wrap) {
+  background: rgba(255, 247, 220, 0.72);
+  border: 2px solid rgba(75, 43, 26, 0.38);
+  border-radius: 5px;
+  box-shadow: inset 0 0 18px rgba(98, 60, 30, 0.09);
+  scrollbar-color: var(--office-teal) rgba(75, 43, 26, 0.12);
+  scrollbar-width: thin;
+}
+
+.admin-dashboard-body :is(.summary-detail-table, .player-table) {
+  background: rgba(255, 248, 226, 0.68);
+}
+
+.admin-dashboard-body :is(.summary-detail-table, .player-table) th {
+  color: #fff4d0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    var(--office-teal-deep);
+  background-size: 100% 24px, auto;
+  border-bottom-color: rgba(255, 244, 208, 0.28);
+}
+
+.admin-dashboard-body :is(.summary-detail-table, .player-table) td {
+  color: var(--office-copy);
+  background: rgba(255, 248, 226, 0.72);
+  border-bottom-color: rgba(75, 43, 26, 0.12);
+}
+
+.admin-dashboard-body :is(.summary-detail-table, .player-table) tbody tr:nth-child(even) td {
+  background: rgba(239, 220, 177, 0.58);
+}
+
+.admin-dashboard-body :is(.summary-detail-table, .player-table) tbody tr:hover td {
+  background: rgba(228, 167, 42, 0.19);
+}
+
+.admin-dashboard-body .player-table tbody tr.active-player-row td {
+  background: rgba(54, 119, 120, 0.2);
+}
+
+.admin-dashboard-body .player-table tbody tr.active-player-row .player-name-cell,
+.admin-dashboard-body .player-id-cell {
+  color: var(--office-teal-deep);
+}
+
+.admin-dashboard-body .empty-table {
+  color: var(--office-copy);
+}
+
+/* Player list: blueprint clipboard */
+
+.admin-dashboard-body .admin-player-list-panel {
+  color: #fff4d0;
+  background:
+    linear-gradient(rgba(239, 251, 238, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 251, 238, 0.09) 1px, transparent 1px),
+    var(--office-teal);
+  background-size: 24px 24px, 24px 24px, auto;
+  border-color: #1e5052;
+}
+
+.admin-dashboard-body .admin-player-list-panel h2,
+.admin-dashboard-body .admin-player-list-panel .player-list-advanced summary {
+  color: #fff2c8;
+}
+
+.admin-dashboard-body .admin-player-list-panel :is(#searchStatus, #playerListStatus):not(:empty) {
+  color: #fff4d0;
+  background: rgba(21, 70, 72, 0.72);
+  border-color: rgba(255, 244, 208, 0.28);
+  border-left-color: var(--office-yellow-light);
+}
+
+.admin-dashboard-body .checkbox-filter {
+  color: var(--office-walnut);
+  background: rgba(255, 248, 226, 0.92);
+  border: 2px solid rgba(40, 93, 96, 0.5);
+}
+
+/* Selected player: layered personnel file */
+
+.admin-dashboard-body .admin-selected-player-panel {
+  background:
+    repeating-linear-gradient(2deg, transparent 0 17px, rgba(103, 66, 34, 0.028) 18px, transparent 19px 36px),
+    linear-gradient(145deg, #fff2d2, #ead4a7);
+}
+
+.admin-dashboard-body .admin-selected-player-scroll {
+  scrollbar-color: var(--office-teal) rgba(75, 43, 26, 0.12);
+  scrollbar-width: thin;
+}
+
+.admin-dashboard-body .admin-general-info-panel {
+  background: rgba(255, 247, 220, 0.72);
+  border-width: 2px;
+  border-top-width: 6px;
+  box-shadow: 0 6px 14px rgba(60, 35, 20, 0.16);
+}
+
+.admin-dashboard-body .admin-detail-accordion {
+  background: rgba(255, 247, 220, 0.78);
+  border: 2px solid rgba(54, 119, 120, 0.45);
+  border-radius: 5px;
+  box-shadow: 0 5px 12px rgba(60, 35, 20, 0.14);
+}
+
+.admin-dashboard-body .admin-detail-accordion summary {
+  color: #fff4cf;
+  background:
+    linear-gradient(90deg, var(--office-teal-deep), var(--office-teal));
+  border-bottom: 0;
+}
+
+.admin-dashboard-body .admin-detail-accordion[open] summary {
+  border-bottom: 4px solid var(--office-yellow);
+}
+
+.admin-dashboard-body .admin-accordion-body {
+  color: var(--office-copy);
+  background: rgba(255, 247, 220, 0.6);
+}
+
+.admin-dashboard-body :is(.admin-accordion-body h3, .admin-inline-form-panel h3, .admin-ban-panel h3) {
+  color: var(--office-teal-deep);
+}
+
+.admin-dashboard-body .admin-inline-form-panel {
+  border-top: 2px dashed rgba(54, 119, 120, 0.45);
+}
+
+.admin-dashboard-body .admin-ban-panel {
+  padding: 14px;
+  background: rgba(167, 72, 63, 0.1);
+  border: 2px solid rgba(167, 72, 63, 0.42);
+  border-radius: 5px;
+}
+
+/* Generated player records and moderation notes */
+
+.admin-dashboard-body .info-card,
+.admin-dashboard-body .empty-state {
+  color: var(--office-copy);
+  background: rgba(255, 250, 232, 0.82);
+  border: 1px solid rgba(75, 43, 26, 0.18);
+  border-left: 5px solid var(--office-yellow);
+  box-shadow: 0 3px 8px rgba(60, 35, 20, 0.1);
+}
+
+.admin-dashboard-body .info-label {
+  color: var(--office-teal-deep);
+}
+
+.admin-dashboard-body .info-value,
+.admin-dashboard-body .info-value.mono {
+  color: var(--office-walnut);
+}
+
+.admin-dashboard-body .pill {
+  color: #fff7df;
+  background: var(--office-teal);
+  border: 1px solid var(--office-teal-deep);
+}
+
+.admin-dashboard-body .status-pill {
+  border: 1px solid currentColor;
+}
+
+.admin-dashboard-body .history-item {
+  color: var(--office-copy);
+  background: rgba(255, 242, 197, 0.84);
+  border: 1px solid rgba(75, 43, 26, 0.2);
+  border-left: 5px solid var(--office-teal);
+  box-shadow: 2px 4px 9px rgba(60, 35, 20, 0.12);
+}
+
+.admin-dashboard-body .history-time,
+.admin-dashboard-body .history-admin,
+.admin-dashboard-body .muted {
+  color: #80654d;
+}
+
+/* Mobile placeholder still receives the new material language. */
+
+.admin-dashboard-body .admin-player-management-mobile-placeholder .panel {
+  padding: 24px;
+  text-align: center;
+}
+
+.admin-dashboard-body #backToTopBtn {
+  color: var(--office-walnut);
+  background: linear-gradient(#f2c451, var(--office-yellow));
+  border: 3px solid #744a19;
+  box-shadow: 0 5px 0 #744a19;
+}
+
+@media (max-width: 1100px) {
+  .admin-dashboard-body .dashboard-summary-heading,
+  .admin-dashboard-body .admin-player-management-header {
+    align-items: flex-start;
+  }
+
+  .admin-dashboard-body #admin-title {
+    max-width: calc(100% - 330px);
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .admin-dashboard-body {
+    padding: 84px 10px 22px;
+  }
+
+  .admin-dashboard-body #admin-taskbar {
+    height: 60px;
+  }
+
+  .admin-dashboard-body #admin-logo {
+    height: 33px;
+  }
+
+  .admin-dashboard-body #admin-title {
+    display: none;
+  }
+
+  .admin-dashboard-body #adminDashboardContent {
+    padding: 13px;
+    border-width: 3px;
+    border-top-width: 7px;
+  }
+
+  .admin-dashboard-body .admin-office-sign {
+    padding: 16px 42px 14px;
+  }
+
+  .admin-dashboard-body .dashboard-summary-heading,
+  .admin-dashboard-body .admin-player-management-header {
+    padding: 13px 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-dashboard-body .admin-office-kicker {
+    font-size: 0.56rem;
+  }
+
+  .admin-dashboard-body .admin-office-note {
+    font-size: 0.72rem;
+  }
+
+  .admin-dashboard-body .dashboard-summary-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .admin-dashboard-body .summary-card {
+    min-height: 110px;
+    padding: 17px 13px 14px;
+  }
+
+  .admin-dashboard-body .dashboard-summary-heading h2::before,
+  .admin-dashboard-body .admin-player-management-header h2::before {
+    display: block;
+    margin-bottom: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-dashboard-body *,
+  .admin-dashboard-body *::before,
+  .admin-dashboard-body *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ---------- END 25. BEAVER SITE OFFICE — ADMIN DASHBOARD ---------- */
+
