@@ -2795,9 +2795,9 @@ textarea::placeholder {
   border: 1px solid currentColor;
 }
 
-.admin-dashboard-body .history-item {
+.admin-dashboard-body :is(.history-entry, .history-item) {
   color: var(--office-copy);
-  background: rgba(255, 242, 197, 0.84);
+  background: #fff2c5;
   border: 1px solid rgba(75, 43, 26, 0.2);
   border-left: 5px solid var(--office-teal);
   box-shadow: 2px 4px 9px rgba(60, 35, 20, 0.12);
@@ -3015,5 +3015,48 @@ textarea::placeholder {
     overflow-wrap: anywhere;
     white-space: normal;
   }
+}
+
+/* Status colors paired with opaque backgrounds so badges stay readable
+   in tables, player files, and moderation history on all screen sizes. */
+.admin-dashboard-body .status-pill {
+  color: #4b4338;
+  background: #eee6d7;
+  border-color: #9b8d78;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.admin-dashboard-body .status-pill:is(.flagged, .banned) {
+  color: #842d27;
+  background: #fbe0d8;
+  border-color: #b96c60;
+}
+
+.admin-dashboard-body .status-pill:is(.review, .pending, .investigating, .unverified) {
+  color: #72500c;
+  background: #fff0c2;
+  border-color: #b58a36;
+}
+
+.admin-dashboard-body .status-pill:is(.active, .resolved, .confirmed, .verified) {
+  color: #245b3c;
+  background: #dff0df;
+  border-color: #6c9977;
+}
+
+.admin-dashboard-body :is(.history-entry, .history-item) .history-action {
+  color: #285d60;
+  text-shadow: none;
+}
+
+.admin-dashboard-body :is(.history-entry, .history-item) .history-note {
+  color: #4b2b1a;
+  text-shadow: none;
+}
+
+.admin-dashboard-body :is(.history-entry, .history-item) :is(.history-time, .history-admin) {
+  color: #664732;
+  opacity: 1;
 }
 
