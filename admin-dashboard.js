@@ -514,7 +514,9 @@ function renderSummaryDetailRows(type, data) {
     const loadButton = row.querySelector("button");
     loadButton.addEventListener("click", async () => {
       await loadPlayer(player.playFabId);
-      scrollToPlayerManagement();
+      if (!window.matchMedia("(max-width: 900px)").matches) {
+        scrollToPlayerManagement();
+      }
     });
 
     summaryDetailBody.appendChild(row);
@@ -569,6 +571,21 @@ function scrollToPlayerManagement() {
     block: "start"
   });
 }
+
+function revealMobilePlayerPanel(selector) {
+  if (!window.matchMedia("(max-width: 900px)").matches) return;
+  const target = document.querySelector(selector);
+  if (!target) return;
+  target.focus({ preventScroll: true });
+  target.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    block: "start"
+  });
+}
+
+document.getElementById("backToPlayerListBtn")?.addEventListener("click", () => {
+  revealMobilePlayerPanel("#adminPlayerListPanel");
+});
 
 async function loadSummaryIntoPlayerList(type = currentSummaryType) {
   applySummaryFiltersToPlayerList(type);
@@ -641,7 +658,7 @@ async function searchPlayers() {
   }
 }
 
-async function loadPlayer(playFabId) {
+async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
   const selectedId = (playFabId || "").trim();
 
   if (!selectedId) {
@@ -651,6 +668,7 @@ async function loadPlayer(playFabId) {
 
   currentPlayFabId = selectedId;
   playerStatus.textContent = `Loading player ${selectedId}...`;
+  if (revealOnMobile) revealMobilePlayerPanel("#adminSelectedPlayerPanel");
 
   try {
     const data = await apiFetch(`/admin/player/${encodeURIComponent(selectedId)}`);
@@ -705,7 +723,7 @@ async function saveInternalData() {
     });
 
     playerStatus.textContent = data.message || "Internal data saved.";
-    await loadPlayer(currentPlayFabId);
+    await loadPlayer(currentPlayFabId, { revealOnMobile: false });
     await loadDashboard();
   } catch (error) {
     console.error(error);
@@ -731,7 +749,7 @@ async function banPlayer() {
     });
 
     playerStatus.textContent = data.message || "Player banned.";
-    await loadPlayer(currentPlayFabId);
+    await loadPlayer(currentPlayFabId, { revealOnMobile: false });
     await loadDashboard();
   } catch (error) {
     console.error(error);

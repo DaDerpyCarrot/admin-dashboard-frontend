@@ -1592,7 +1592,7 @@ pre {
   margin-bottom: 0;
 }
 
-.admin-player-management-mobile-placeholder {
+.admin-mobile-list-return {
   display: none;
 }
 
@@ -1600,18 +1600,10 @@ pre {
 
 
 /* =========================================================
-   22. MOBILE PLAYER MANAGEMENT PLACEHOLDER
+   22. PLAYER MANAGEMENT RESPONSIVE NOTE
    ========================================================= */
 
-@media (max-width: 900px) {
-  .admin-player-management-desktop {
-    display: none;
-  }
-
-  .admin-player-management-mobile-placeholder {
-    display: block;
-  }
-}
+/* Mobile management rules follow the office theme at the end of this file. */
 
 /* ---------- END 22. MOBILE PLAYER MANAGEMENT PLACEHOLDER ---------- */
 
@@ -2912,4 +2904,116 @@ textarea::placeholder {
 }
 
 /* ---------- END 25. BEAVER SITE OFFICE — ADMIN DASHBOARD ---------- */
+
+/* ---------- MOBILE PLAYER MANAGEMENT ---------- */
+@media (max-width: 900px) {
+  .admin-dashboard-body .admin-player-management-grid {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    gap: 20px;
+  }
+
+  .admin-dashboard-body :is(.admin-player-list-column, .admin-selected-player-panel) {
+    min-width: 0;
+    min-height: 0;
+    overflow: visible;
+    scroll-margin-top: 110px;
+  }
+
+  .admin-dashboard-body .admin-selected-player-scroll {
+    flex: none;
+    overflow: visible;
+    max-height: none;
+    padding-right: 0;
+  }
+
+  .admin-dashboard-body .admin-player-list-column .player-table-wrap {
+    flex: none;
+    width: 100%;
+    max-height: 420px;
+    max-height: min(52dvh, 420px);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .admin-dashboard-body .admin-player-list-column .player-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .admin-dashboard-body .admin-player-list-column .player-table th:first-child {
+    width: auto;
+  }
+
+  .admin-dashboard-body .admin-player-list-column .player-table td:first-child {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .admin-dashboard-body .admin-selected-player-panel .info-grid,
+  .admin-dashboard-body .admin-moderation-layout,
+  .admin-dashboard-body .admin-detail-accordion .admin-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-dashboard-body .admin-form-field-small {
+    max-width: none;
+  }
+
+  .admin-dashboard-body .admin-selected-player-panel :is(.info-card, .history-entry, .pill, .status-pill) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-dashboard-body .admin-selected-player-panel .status-pill {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .admin-dashboard-body .admin-selected-player-panel :is(input, select, textarea) {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .admin-dashboard-body .admin-mobile-list-return {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    min-height: 44px;
+    white-space: normal;
+  }
+
+  .admin-dashboard-body .admin-player-management :is(button, summary) {
+    min-height: 44px;
+  }
+
+  .admin-dashboard-body .admin-player-management-header,
+  .admin-dashboard-body .admin-selected-title {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-dashboard-body :is(.admin-player-list-column, .admin-selected-player-panel) {
+    padding: 12px;
+    scroll-margin-top: 80px;
+  }
+
+  .admin-dashboard-body .admin-player-cache-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-dashboard-body .admin-accordion-body,
+  .admin-dashboard-body .admin-general-info-panel {
+    padding: 10px;
+  }
+
+  .admin-dashboard-body .admin-player-management button {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
 

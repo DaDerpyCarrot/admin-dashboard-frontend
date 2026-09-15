@@ -93,7 +93,7 @@
       </section>
       </section>
 
-    <section class="admin-player-management admin-player-management-desktop" aria-label="Player management">
+    <section class="admin-player-management" aria-label="Player management">
       <div class="admin-player-management-header">
         <div>
           <h2>Player Management</h2>
@@ -102,7 +102,7 @@
       </div>
 
       <div class="admin-player-management-grid">
-        <aside class="panel admin-player-list-panel admin-player-list-column">
+        <aside class="panel admin-player-list-panel admin-player-list-column" id="adminPlayerListPanel" tabindex="-1">
           <div class="admin-column-heading">
             <h2>Player List</h2>
           </div>
@@ -182,12 +182,13 @@
           </div>
         </aside>
 
-        <section class="panel admin-selected-player-panel">
+        <section class="panel admin-selected-player-panel" id="adminSelectedPlayerPanel" tabindex="-1" aria-labelledby="selectedPlayerHeading">
           <div class="admin-detail-top">
             <div class="admin-selected-title">
-              <h2>Selected Player</h2>
-              <p id="playerStatus"></p>
+              <h2 id="selectedPlayerHeading">Selected Player</h2>
+              <p id="playerStatus" role="status" aria-live="polite"></p>
             </div>
+            <button type="button" id="backToPlayerListBtn" class="admin-mobile-list-return">Back to Player List</button>
           </div>
 
           <div class="admin-legacy-direct-search-hooks" aria-hidden="true">
@@ -308,13 +309,6 @@
             </details>
           </div>
         </section>
-      </div>
-    </section>
-
-    <section class="admin-player-management-mobile-placeholder">
-      <div class="panel">
-        <h2>Mobile Player Management</h2>
-        <p>This layout will be designed separately. The desktop player-management shell is the active layout for now.</p>
       </div>
     </section>
 
