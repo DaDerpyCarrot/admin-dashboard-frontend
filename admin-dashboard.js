@@ -22,6 +22,7 @@ localStorage.removeItem("adminToken");
 
 const token = sessionStorage.getItem("adminToken");
 const dashboardContent = document.getElementById("adminDashboardContent");
+let crewPanel = null;
 
 function clearAdminSession() {
   sessionStorage.removeItem("adminToken");
@@ -29,6 +30,7 @@ function clearAdminSession() {
 }
 
 function returnToLandingLogin() {
+  crewPanel?.dispose();
   clearAdminSession();
   window.location.replace(LANDING_LOGIN_URL);
 }
@@ -38,6 +40,7 @@ if (!token) {
 }
 
 let currentPlayFabId = "";
+let playerLoadVersion = 0;
 let currentPlayerListRows = [];
 let currentSort = {
   key: "lastLogin",
@@ -667,11 +670,19 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
   }
 
   currentPlayFabId = selectedId;
+  const loadVersion = ++playerLoadVersion;
+  crewPanel?.select(selectedId);
+  saveInternalBtn.disabled = true;
+  banPlayerBtn.disabled = true;
+  [profileOutput, statsOutput, userDataOutput, internalDataOutput, segmentsOutput, moderationHistoryOutput]
+    .forEach(output => clearContainer(output, "Loading selected player…"));
+  [adminNoteInput, accountStatusInput, reviewStateInput, strikeCountInput].forEach(input => { input.value = ""; });
   playerStatus.textContent = `Loading player ${selectedId}...`;
   if (revealOnMobile) revealMobilePlayerPanel("#adminSelectedPlayerPanel");
 
   try {
     const data = await apiFetch(`/admin/player/${encodeURIComponent(selectedId)}`);
+    if (loadVersion !== playerLoadVersion) return;
     const player = data.player || {};
 
     renderProfile(player.profile || {});
@@ -688,12 +699,17 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
     strikeCountInput.value = safeValue(player.internalData?.StrikeCount);
 
     playerStatus.textContent = `Player loaded: ${selectedId}`;
+    saveInternalBtn.disabled = false;
+    banPlayerBtn.disabled = false;
+    crewPanel?.ready(selectedId);
     
     renderPlayerList(currentPlayerListRows);
     await loadDashboard();
   } catch (error) {
+    if (loadVersion !== playerLoadVersion) return;
     console.error(error);
     playerStatus.textContent = error.message;
+    crewPanel?.unavailable(selectedId);
   }
 }
 
@@ -925,6 +941,7 @@ function renderKeyValueData(container, data, useStatusPills = false) {
 
   const entries = Object.entries(data || {}).filter(([key]) => {
     const normalizedKey = String(key).toLowerCase();
+    if (/^(workermessage_|workerfriend_|workerfriendin_|workerfriendout_|workerpresence$)/i.test(key)) return false;
 
     if (useStatusPills) {
       return normalizedKey !== "moderationhistory";
@@ -1004,6 +1021,7 @@ async function initializeDashboardSession() {
   }
 }
 
+crewPanel = window.AdminCrew?.init({ request: apiFetch, openPlayer: loadPlayer }) || null;
 initializeDashboardSession();
 
 const backToTopBtn = document.getElementById("backToTopBtn");

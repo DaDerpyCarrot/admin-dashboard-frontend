@@ -1,0 +1,82 @@
+/* A compact field-office file. Existing dashboard layout and fonts stay intact. */
+.admin-dashboard-body .admin-crew-summary { white-space: normal; }
+.admin-dashboard-body .admin-crew-counts {
+  display: inline-flex; gap: 6px; flex-wrap: wrap; margin-left: 12px;
+  vertical-align: middle; font-size: 11px; font-weight: 600; letter-spacing: 0;
+  text-transform: none; line-height: 1.6;
+}
+.admin-dashboard-body .admin-crew-counts > span {
+  background: #fff4d0; color: #294e4c; border: 1px solid #e0b65d;
+  border-radius: 4px; padding: 2px 7px;
+}
+.admin-dashboard-body .admin-crew-body { color: #49301f; }
+.admin-crew-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.admin-crew-toolbar > div { flex: 1 1 180px; min-width: 0; }
+.admin-crew-toolbar strong { display: block; overflow-wrap: anywhere; font-size: 13px; }
+.admin-crew-label, .admin-crew-search-label {
+  display: block; color: #245e5b; font-size: 11px; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px;
+}
+.admin-crew-readonly {
+  background: #e7efd8; color: #31533d; border: 1px solid #96b99a;
+  padding: 5px 8px; border-radius: 4px; font-size: 10px; font-weight: 800;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.admin-dashboard-body .admin-crew-body button {
+  min-height: 40px; border-radius: 4px; font: inherit; font-size: 12px;
+  font-weight: 800; padding: 8px 12px; cursor: pointer;
+}
+.admin-dashboard-body .admin-crew-body button:disabled { cursor: wait; opacity: .6; }
+.admin-dashboard-body #crewRefreshBtn, .admin-dashboard-body .admin-crew-view {
+  background: #edaf27; color: #3d2918; border: 2px solid #987128;
+}
+.admin-dashboard-body .admin-crew-body button:focus-visible,
+.admin-dashboard-body #crewFilter:focus-visible {
+  outline: 3px solid #257d82; outline-offset: 3px;
+}
+.admin-crew-status {
+  background: #fff9e7; color: #49301f; border-left: 3px solid #cc9224;
+  padding: 10px 12px; margin: 14px 0; font-size: 12px; line-height: 1.6;
+}
+.admin-crew-status[data-state="error"] { color: #842b21; border-color: #b6533e; background: #fff0e4; }
+.admin-crew-groups { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.admin-dashboard-body .admin-crew-groups button {
+  background: #fff6d9; color: #245e5b; border: 1px solid #99b3a5;
+}
+.admin-dashboard-body .admin-crew-groups button[aria-pressed="true"] {
+  background: #245e5b; color: #fff6d9; border-color: #245e5b;
+}
+.admin-crew-groups span { margin-left: 5px; }
+.admin-dashboard-body #crewFilter {
+  width: 100%; box-sizing: border-box; min-width: 0; min-height: 44px;
+  background: #fffdf3; color: #49301f; border: 1px solid #98aea2;
+  border-radius: 4px; padding: 10px 12px; font: inherit; font-size: 13px;
+}
+.admin-dashboard-body #crewFilter::placeholder { color: #6b6858; opacity: 1; }
+.admin-dashboard-body #crewGroupHeading { margin: 18px 0 10px; }
+.admin-crew-list { padding: 0; margin: 0; list-style: none; }
+.admin-crew-contact {
+  display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 10px;
+  background: #fff8e0; border: 1px solid #b4c0a6; border-left: 4px solid #d5a32f;
+  border-radius: 5px;
+}
+.admin-crew-avatar {
+  width: 48px; height: 54px; flex: 0 0 48px; object-fit: contain;
+  background: #f6e8bc; border: 1px solid #91aaa0; border-radius: 4px;
+}
+.admin-crew-contact-copy { flex: 1; min-width: 0; }
+.admin-crew-name { display: block; font-size: 13px; color: #49301f; overflow-wrap: anywhere; }
+.admin-crew-id { display: block; font-size: 11px; color: #65523d; margin: 4px 0; overflow-wrap: anywhere; }
+.admin-crew-presence { color: #5e5847; font-size: 11px; line-height: 1.5; }
+.admin-crew-presence[data-online="true"] { color: #245e3e; font-weight: 700; }
+.admin-crew-presence[data-online="true"]::before { content: "● "; }
+.admin-crew-empty { padding: 18px 12px; border: 1px dashed #a9b29b; color: #5e4a35; line-height: 1.6; font-size: 13px; }
+.admin-crew-footnote { color: #66523d; margin: 18px 0 0; font-size: 11px; line-height: 1.7; }
+.admin-crew-body [hidden] { display: none !important; }
+@media (max-width: 560px) {
+  .admin-dashboard-body .admin-crew-counts { display: flex; margin: 9px 0 0; }
+  .admin-crew-contact { flex-wrap: wrap; gap: 10px; }
+  .admin-crew-contact-copy { flex-basis: calc(100% - 62px); }
+  .admin-dashboard-body .admin-crew-view { width: 100%; min-height: 44px; }
+  .admin-dashboard-body #crewRefreshBtn { min-height: 44px; }
+}

@@ -6,6 +6,7 @@
   <title>Roadimentary Admin Dashboard</title>
   <link rel="icon" type="image/png" href="/assets/fav_logo.png">
   <link rel="stylesheet" href="./admin-style.css" />
+  <link rel="stylesheet" href="./admin-friends.css?v=crew-1" />
 </head>
 <body class="admin-dashboard-body admin-dashboard-hidden">
   <header id="admin-taskbar">
@@ -214,6 +215,37 @@
             </details>
 
             <details class="admin-detail-accordion">
+              <summary class="admin-crew-summary">
+                <span>Crew &amp; Friends</span>
+                <span class="admin-crew-counts" aria-label="Crew counts">
+                  <span><b id="crewFriendsCount">—</b> friends</span>
+                  <span><b id="crewIncomingCount">—</b> received</span>
+                  <span><b id="crewOutgoingCount">—</b> sent</span>
+                </span>
+              </summary>
+              <div class="admin-accordion-body admin-crew-body" id="adminCrewPanel" aria-busy="false">
+                <div class="admin-crew-toolbar">
+                  <div><span class="admin-crew-label">Selected operator</span><strong id="crewPlayerId">No player selected</strong></div>
+                  <span class="admin-crew-readonly">Read-only file</span>
+                  <button type="button" id="crewRefreshBtn" disabled>Refresh crew</button>
+                </div>
+                <p class="admin-crew-status" id="crewStatus" role="status" aria-live="polite">Select a player to inspect their crew.</p>
+                <div id="crewControls" hidden>
+                  <div class="admin-crew-groups" role="group" aria-label="Relationship category">
+                    <button type="button" data-crew-group="friends" aria-pressed="true">Friends <span data-crew-count="friends">0</span></button>
+                    <button type="button" data-crew-group="incoming" aria-pressed="false">Received <span data-crew-count="incoming">0</span></button>
+                    <button type="button" data-crew-group="outgoing" aria-pressed="false">Sent <span data-crew-count="outgoing">0</span></button>
+                  </div>
+                  <label class="admin-crew-search-label" for="crewFilter">Find within this crew</label>
+                  <input type="search" id="crewFilter" placeholder="Display name or PlayFab ID" autocomplete="off" />
+                  <h3 id="crewGroupHeading">Friends</h3>
+                  <ul id="crewContactList" class="admin-crew-list" aria-labelledby="crewGroupHeading"></ul>
+                </div>
+                <p class="admin-crew-footnote">Game presence is a snapshot of recent in-game activity, not website activity. Refresh for an update. Private conversations are not displayed.</p>
+              </div>
+            </details>
+
+            <details class="admin-detail-accordion">
               <summary>Stats</summary>
               <div class="admin-accordion-body">
                 <div id="statsOutput" class="info-grid">
@@ -315,6 +347,7 @@
     <button id="backToTopBtn" title="Go to top">&uarr;</button>
   </div>
 
-  <script src="./admin-dashboard.js"></script>
+  <script src="./admin-friends.js?v=crew-1"></script>
+  <script src="./admin-dashboard.js?v=crew-1"></script>
 </body>
 </html>
