@@ -23,6 +23,7 @@ localStorage.removeItem("adminToken");
 const token = sessionStorage.getItem("adminToken");
 const dashboardContent = document.getElementById("adminDashboardContent");
 let crewPanel = null;
+let ledgerPanel = null;
 
 function clearAdminSession() {
   sessionStorage.removeItem("adminToken");
@@ -30,6 +31,7 @@ function clearAdminSession() {
 }
 
 function returnToLandingLogin() {
+  ledgerPanel?.dispose();
   crewPanel?.dispose();
   clearAdminSession();
   window.location.replace(LANDING_LOGIN_URL);
@@ -672,6 +674,7 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
   currentPlayFabId = selectedId;
   const loadVersion = ++playerLoadVersion;
   crewPanel?.select(selectedId);
+  ledgerPanel?.select(selectedId);
   saveInternalBtn.disabled = true;
   banPlayerBtn.disabled = true;
   [profileOutput, statsOutput, userDataOutput, internalDataOutput, segmentsOutput, moderationHistoryOutput]
@@ -702,6 +705,7 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
     saveInternalBtn.disabled = false;
     banPlayerBtn.disabled = false;
     crewPanel?.ready(selectedId);
+    ledgerPanel?.ready(selectedId);
     
     renderPlayerList(currentPlayerListRows);
     await loadDashboard();
@@ -710,6 +714,7 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
     console.error(error);
     playerStatus.textContent = error.message;
     crewPanel?.unavailable(selectedId);
+    ledgerPanel?.unavailable(selectedId);
   }
 }
 
@@ -1022,6 +1027,10 @@ async function initializeDashboardSession() {
 }
 
 crewPanel = window.AdminCrew?.init({ request: apiFetch, openPlayer: loadPlayer }) || null;
+ledgerPanel = window.AdminLedger?.init({
+  request: apiFetch,
+  isSessionCurrent: () => Boolean(token) && sessionStorage.getItem("adminToken") === token
+}) || null;
 initializeDashboardSession();
 
 const backToTopBtn = document.getElementById("backToTopBtn");

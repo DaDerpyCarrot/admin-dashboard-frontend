@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="/assets/fav_logo.png">
   <link rel="stylesheet" href="./admin-style.css" />
   <link rel="stylesheet" href="./admin-friends.css?v=crew-1" />
+  <link rel="stylesheet" href="./admin-transactions.css?v=ledger-admin-1" />
 </head>
 <body class="admin-dashboard-body admin-dashboard-hidden">
   <header id="admin-taskbar">
@@ -245,6 +246,37 @@
               </div>
             </details>
 
+            <details class="admin-detail-accordion" id="adminTransactionsAccordion">
+              <summary class="admin-ledger-summary">
+                <span>Transactions</span>
+                <span id="adminLedgerSummary" class="admin-ledger-summary-count">Not loaded</span>
+              </summary>
+              <div class="admin-accordion-body admin-ledger-body" id="adminLedgerPanel" aria-busy="false">
+                <div class="admin-ledger-toolbar">
+                  <div><span class="admin-ledger-label">Selected operator / purchase file</span><strong id="adminLedgerPlayerId">No player selected</strong></div>
+                  <span class="admin-ledger-readonly">Read-only ledger</span>
+                  <button type="button" id="adminLedgerRefresh" disabled>Refresh ledger</button>
+                </div>
+                <p class="admin-ledger-coverage">Captured PlayFab Legacy virtual-currency purchases only. PayMongo payments, contract-budget/material spending, and pending/failed attempts are not connected. Older purchases may still need importing.</p>
+                <form id="adminLedgerFilters" class="admin-ledger-filters">
+                  <div><label for="adminLedgerCurrency">Currency</label><select id="adminLedgerCurrency" data-ledger-field="currency" disabled><option value="">All currencies</option></select></div>
+                  <div><label for="adminLedgerFrom">From date</label><input id="adminLedgerFrom" data-ledger-field="from" type="date" disabled></div>
+                  <div><label for="adminLedgerThrough">Through date</label><input id="adminLedgerThrough" data-ledger-field="through" type="date" disabled></div>
+                  <div class="admin-ledger-search"><label for="adminLedgerSearch">Item ID or purchase ID</label><input id="adminLedgerSearch" data-ledger-field="q" type="search" maxlength="100" placeholder="e.g. industrytokens-tier-02" disabled></div>
+                  <div><label for="adminLedgerLimit">Rows per load</label><select id="adminLedgerLimit" data-ledger-field="limit" disabled><option value="20">20 rows</option><option value="50">50 rows</option></select></div>
+                  <button type="submit" id="adminLedgerApply" disabled>Apply filters</button>
+                </form>
+                <p class="admin-ledger-filter-note" id="adminLedgerFilterNote">Dates use this browser's local time. Search uses IDs, not item names.</p>
+                <p class="admin-ledger-status" id="adminLedgerStatus" role="status" aria-live="polite">Select a player, then open Transactions to inspect their captured purchases.</p>
+                <p class="admin-ledger-count" id="adminLedgerCount">No history loaded</p>
+                <ul class="admin-ledger-list" id="adminLedgerList" aria-label="Selected player's recorded purchases"></ul>
+                <div class="admin-ledger-footer">
+                  <p>Amounts are game currency, not real-money charges. Names use the current catalog; unavailable names fall back to item IDs. Nothing is charged, refunded, or granted here.</p>
+                  <button type="button" id="adminLedgerMore" hidden>Load more</button>
+                </div>
+              </div>
+            </details>
+
             <details class="admin-detail-accordion">
               <summary>Stats</summary>
               <div class="admin-accordion-body">
@@ -348,6 +380,7 @@
   </div>
 
   <script src="./admin-friends.js?v=crew-1"></script>
-  <script src="./admin-dashboard.js?v=crew-1"></script>
+  <script src="./admin-transactions.js?v=ledger-admin-1"></script>
+  <script src="./admin-dashboard.js?v=ledger-admin-1"></script>
 </body>
 </html>
