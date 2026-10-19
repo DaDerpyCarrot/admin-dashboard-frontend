@@ -1,0 +1,55 @@
+/* Curated account/profile/performance views. Existing moderation, ledger and crew layouts stay intact. */
+.admin-dashboard-body .admin-performance-panel, .admin-dashboard-body .admin-record-profile { min-width: 0; color: #47311f; }
+.admin-performance-toolbar { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.admin-dashboard-body .admin-performance-toolbar h3 { margin: 0; color: #235e62; }
+.admin-performance-toolbar p, .admin-record-note { margin: 8px 0 12px; color: #624a33; font-size: .76rem; line-height: 1.65; overflow-wrap: anywhere; }
+.admin-dashboard-body #adminStatsRefresh { min-height: 44px; color: #235e62; background: #fff7df; border: 2px solid #39777a; font-size: .76rem; }
+.admin-dashboard-body #adminStatsRefresh:disabled { opacity: .6; cursor: not-allowed; }
+.admin-dashboard-body #adminStatsRefresh:focus-visible, .admin-raw-stats > summary:focus-visible, .admin-record-identifiers > summary:focus-visible { outline: 3px solid #24676a; outline-offset: 3px; }
+.admin-record-status { padding: 11px 13px; margin: 12px 0 16px; color: #245854; background: #edf2dc; border-left: 4px solid #4b7b68; font-size: .76rem; line-height: 1.6; }
+.admin-record-status[data-state="warning"] { color: #65440c; background: #fff1cf; border-color: #a37220; }
+.admin-record-status[data-state="error"] { color: #812d27; background: #fbe9df; border-color: #ad4e40; }
+.admin-performance-progression { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 12px; margin-bottom: 12px; }
+.admin-performance-card, .admin-performance-xp, .admin-record-bio, .admin-training-card { min-width: 0; padding: 15px; color: #47311f; background: #fff9e7; border: 1px solid #b9b994; border-left: 4px solid #c09331; border-radius: 5px; }
+.admin-dashboard-body .admin-performance-card h4, .admin-dashboard-body .admin-performance-xp h4, .admin-dashboard-body .admin-record-bio h4, .admin-dashboard-body .admin-training-card h4 { margin: 0 0 9px; color: #235e62; font: 800 .75rem/1.5 "Lexend", sans-serif; overflow-wrap: anywhere; }
+.admin-dashboard-body .admin-performance-card strong { display: block; color: #47311f; font: 900 clamp(1.05rem, 1.5vw, 1.35rem)/1.35 "Montserrat", sans-serif; overflow-wrap: anywhere; }
+.admin-performance-card small, .admin-performance-xp small, .admin-record-bio small, .admin-record-identity small, .admin-training-card small { display: block; margin-top: 9px; color: #65503a; font-size: .67rem; line-height: 1.6; overflow-wrap: anywhere; }
+.admin-performance-progression > .admin-performance-card { background: #e9eedb; border-left-color: #39777a; }
+.admin-dashboard-body .admin-performance-progression > .admin-performance-card strong { font-size: 2.1rem; }
+.admin-performance-xp { display: flex; flex-direction: column; justify-content: center; border-left-width: 1px; }
+.admin-dashboard-body .admin-performance-xp-total { color: #47311f; margin: 3px 0 10px; font: 800 1rem/1.5 "Montserrat", sans-serif; }
+.admin-performance-xp progress { display: block; width: 100%; height: 17px; appearance: none; overflow: hidden; border: 1px solid #678d7e; border-radius: 4px; background: #dce4cb; accent-color: #327779; }
+.admin-performance-xp progress::-webkit-progress-bar { background: #dce4cb; }
+.admin-performance-xp progress::-webkit-progress-value { background: #327779; }
+.admin-performance-xp progress::-moz-progress-bar { background: #327779; }
+.admin-performance-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.admin-performance-coverage { margin: 14px 0; padding: 11px 13px; color: #63451d; background: #fff4d8; border-left: 3px solid #b17f27; font-size: .74rem; line-height: 1.65; }
+.admin-record-identity { display: flex; gap: 15px; align-items: center; margin-bottom: 16px; }
+.admin-record-identity img { width: 76px; height: 76px; flex: 0 0 76px; object-fit: contain; padding: 4px; border: 2px solid #39777a; border-radius: 7px; background: #f4edc7; }
+.admin-record-identity > div { min-width: 0; }
+.admin-dashboard-body .admin-record-identity h3 { color: #47311f; margin: 0; overflow-wrap: anywhere; }
+.admin-record-identity .admin-record-id { margin: 5px 0 0; color: #235e62; font-size: .8rem; overflow-wrap: anywhere; }
+.admin-record-bios { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.admin-record-bio p { color: #47311f; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .84rem; line-height: 1.65; }
+.admin-record-identifiers, .admin-raw-stats { margin-top: 16px; padding-top: 12px; color: #5d452e; border-top: 1px dashed #a4ad8b; font-size: .76rem; line-height: 1.65; }
+.admin-record-identifiers summary, .admin-raw-stats summary { color: #235e62; cursor: pointer; font-weight: 800; min-height: 34px; }
+.admin-record-identifiers p { overflow-wrap: anywhere; }
+.admin-training-section { margin-top: 22px; padding-top: 18px; border-top: 1px solid #bdc4a4; }
+.admin-training-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.admin-training-card { border-left-width: 1px; }
+.admin-training-state { display: inline-block; padding: 5px 9px; border: 1px solid #8fa58b; border-radius: 99px; color: #23594e; background: #e9eedb; font-size: .68rem; font-weight: 800; }
+.admin-training-state.pending { color: #65440c; background: #fff0c8; border-color: #c59b48; }
+.admin-training-state.unknown { color: #653f29; background: #f4e7d5; border-color: #b49a78; }
+.admin-raw-stats-wrap { min-width: 0; max-width: 100%; overflow-x: auto; }
+.admin-raw-stats-table { width: 100%; table-layout: fixed; border-collapse: collapse; color: #47311f; background: #fff9e7; font-size: .72rem; }
+.admin-raw-stats-table caption { text-align: left; color: #5d452e; margin-bottom: 9px; }
+.admin-dashboard-body .admin-raw-stats-table :is(th, td) { padding: 10px; color: #47311f; border-bottom: 1px solid #ccd0b5; text-align: left; vertical-align: top; overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
+.admin-dashboard-body .admin-raw-stats-table thead th { color: #235e62; background: #e9eedb; }
+@media (max-width: 600px) {
+  .admin-performance-progression, .admin-record-bios { grid-template-columns: minmax(0, 1fr); }
+  .admin-dashboard-body #adminStatsRefresh { width: 100%; }
+  .admin-record-identity { align-items: flex-start; gap: 12px; }
+  .admin-record-identity img { width: 64px; height: 64px; flex-basis: 64px; }
+  .admin-dashboard-body .admin-raw-stats-table :is(th, td) { padding: 8px; }
+}
+@media (max-width: 400px) { .admin-performance-grid, .admin-training-grid { grid-template-columns: minmax(0, 1fr); } }

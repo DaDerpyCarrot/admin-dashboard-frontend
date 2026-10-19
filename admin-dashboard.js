@@ -24,6 +24,8 @@ const token = sessionStorage.getItem("adminToken");
 const dashboardContent = document.getElementById("adminDashboardContent");
 let crewPanel = null;
 let ledgerPanel = null;
+let recordPanel = null;
+let sessionClosing = false;
 
 function clearAdminSession() {
   sessionStorage.removeItem("adminToken");
@@ -31,8 +33,12 @@ function clearAdminSession() {
 }
 
 function returnToLandingLogin() {
+  if (sessionClosing) return;
+  sessionClosing = true;
+  recordPanel?.dispose();
   ledgerPanel?.dispose();
   crewPanel?.dispose();
+  ["profileOutput", "userDataOutput", "internalDataOutput", "moderationHistoryOutput"].forEach(id => document.getElementById(id)?.replaceChildren());
   clearAdminSession();
   window.location.replace(LANDING_LOGIN_URL);
 }
@@ -91,10 +97,8 @@ const saveInternalBtn = document.getElementById("saveInternalBtn");
 const banPlayerBtn = document.getElementById("banPlayerBtn");
 
 const profileOutput = document.getElementById("profileOutput");
-const statsOutput = document.getElementById("statsOutput");
 const userDataOutput = document.getElementById("userDataOutput");
 const internalDataOutput = document.getElementById("internalDataOutput");
-const segmentsOutput = document.getElementById("segmentsOutput");
 
 const adminNoteInput = document.getElementById("adminNoteInput");
 const accountStatusInput = document.getElementById("accountStatusInput");
@@ -109,6 +113,10 @@ const moderationHistoryOutput = document.getElementById("moderationHistoryOutput
 
 
 async function apiFetch(path, options = {}) {
+  if (sessionClosing || sessionStorage.getItem("adminToken") !== token) {
+    returnToLandingLogin();
+    throw new Error("Your admin session changed. Sign in again.");
+  }
   const response = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: {
@@ -124,6 +132,11 @@ async function apiFetch(path, options = {}) {
     data = await response.json();
   } catch (error) {
     throw new Error(`Request failed with status ${response.status}, and response was not valid JSON.`);
+  }
+
+  if (sessionClosing || sessionStorage.getItem("adminToken") !== token) {
+    returnToLandingLogin();
+    throw new Error("Your admin session changed. Sign in again.");
   }
 
 if (!response.ok) {
@@ -143,22 +156,6 @@ function safeValue(entry) {
   if (typeof entry === "string") return entry;
   if (typeof entry.Value === "string") return entry.Value;
   return "";
-}
-
-function renderSegments(segments) {
-  segmentsOutput.innerHTML = "";
-
-  if (!Array.isArray(segments) || segments.length === 0) {
-    segmentsOutput.innerHTML = "<span class='pill'>No segments found</span>";
-    return;
-  }
-
-  segments.forEach(segment => {
-    const pill = document.createElement("span");
-    pill.className = "pill";
-    pill.textContent = segment.Name || segment.Id || "Unnamed Segment";
-    segmentsOutput.appendChild(pill);
-  });
 }
 
 function renderSearchResults(players) {
@@ -673,11 +670,12 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
 
   currentPlayFabId = selectedId;
   const loadVersion = ++playerLoadVersion;
+  recordPanel?.select(selectedId);
   crewPanel?.select(selectedId);
   ledgerPanel?.select(selectedId);
   saveInternalBtn.disabled = true;
   banPlayerBtn.disabled = true;
-  [profileOutput, statsOutput, userDataOutput, internalDataOutput, segmentsOutput, moderationHistoryOutput]
+  [profileOutput, userDataOutput, internalDataOutput, moderationHistoryOutput]
     .forEach(output => clearContainer(output, "Loading selected player…"));
   [adminNoteInput, accountStatusInput, reviewStateInput, strikeCountInput].forEach(input => { input.value = ""; });
   playerStatus.textContent = `Loading player ${selectedId}...`;
@@ -685,15 +683,18 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
 
   try {
     const data = await apiFetch(`/admin/player/${encodeURIComponent(selectedId)}`);
-    if (loadVersion !== playerLoadVersion) return;
+    if (loadVersion !== playerLoadVersion || sessionClosing || sessionStorage.getItem("adminToken") !== token) return;
     const player = data.player || {};
+    if (data.ok !== true || String(player.playFabId || "").toUpperCase() !== selectedId.toUpperCase()
+      || (player.profile?.PlayerId && String(player.profile.PlayerId).toUpperCase() !== selectedId.toUpperCase())) {
+      throw new Error("The server returned a different player's record. No data was displayed.");
+    }
 
     renderProfile(player.profile || {});
-    renderStatistics(player.statistics || []);
+    recordPanel?.ready(selectedId, player);
     renderKeyValueData(userDataOutput, player.userData || {}, false);
     renderKeyValueData(internalDataOutput, player.internalData || {}, true);
 
-    renderSegments(player.segments || []);
     renderModerationHistory(player.moderationHistory || []);
 
     adminNoteInput.value = safeValue(player.internalData?.AdminNote);
@@ -710,11 +711,14 @@ async function loadPlayer(playFabId, { revealOnMobile = true } = {}) {
     renderPlayerList(currentPlayerListRows);
     await loadDashboard();
   } catch (error) {
-    if (loadVersion !== playerLoadVersion) return;
+    if (loadVersion !== playerLoadVersion || sessionClosing || sessionStorage.getItem("adminToken") !== token) return;
     console.error(error);
     playerStatus.textContent = error.message;
     crewPanel?.unavailable(selectedId);
     ledgerPanel?.unavailable(selectedId);
+    recordPanel?.unavailable(selectedId);
+    [profileOutput, userDataOutput, internalDataOutput, moderationHistoryOutput]
+      .forEach(output => clearContainer(output, "The selected player record could not be loaded."));
   }
 }
 
@@ -914,8 +918,6 @@ function renderProfile(profile) {
 
   profileOutput.appendChild(createInfoCard("Display Name", profile.DisplayName));
   profileOutput.appendChild(createInfoCard("PlayFab ID", profile.PlayerId, { mono: true }));
-  profileOutput.appendChild(createInfoCard("Title ID", profile.TitleId, { mono: true }));
-  profileOutput.appendChild(createInfoCard("Publisher ID", profile.PublisherId, { mono: true }));
   profileOutput.appendChild(createInfoCard("Created", formatDate(profile.Created), { soft: true }));
   profileOutput.appendChild(createInfoCard("Last Login", formatDate(profile.LastLogin), { soft: true }));
   profileOutput.appendChild(createInfoCard("Email", primaryEmail?.EmailAddress || "—"));
@@ -926,27 +928,13 @@ function renderProfile(profile) {
   );
 }
 
-function renderStatistics(statistics) {
-  statsOutput.innerHTML = "";
-
-  if (!Array.isArray(statistics) || statistics.length === 0) {
-    clearContainer(statsOutput, "No statistics found.");
-    return;
-  }
-
-  statistics.forEach(stat => {
-    const name = stat.StatisticName || "Unnamed Stat";
-    const value = stat.Value ?? "—";
-    statsOutput.appendChild(createInfoCard(name, String(value)));
-  });
-}
-
 function renderKeyValueData(container, data, useStatusPills = false) {
   container.innerHTML = "";
 
   const entries = Object.entries(data || {}).filter(([key]) => {
     const normalizedKey = String(key).toLowerCase();
     if (/^(workermessage_|workerfriend_|workerfriendin_|workerfriendout_|workerpresence$)/i.test(key)) return false;
+    if (!useStatusPills && window.AdminPlayerRecord?.handlesClientKey(key)) return false;
 
     if (useStatusPills) {
       return normalizedKey !== "moderationhistory";
@@ -962,7 +950,7 @@ function renderKeyValueData(container, data, useStatusPills = false) {
   });
 
   if (entries.length === 0) {
-    clearContainer(container, "No data found.");
+    clearContainer(container, useStatusPills ? "No data found." : "No other client data. Profile and performance fields are grouped above.");
     return;
   }
 
@@ -1027,6 +1015,10 @@ async function initializeDashboardSession() {
 }
 
 crewPanel = window.AdminCrew?.init({ request: apiFetch, openPlayer: loadPlayer }) || null;
+recordPanel = window.AdminPlayerRecord?.init({
+  request: apiFetch,
+  isSessionCurrent: () => !sessionClosing && Boolean(token) && sessionStorage.getItem("adminToken") === token
+}) || null;
 ledgerPanel = window.AdminLedger?.init({
   request: apiFetch,
   isSessionCurrent: () => Boolean(token) && sessionStorage.getItem("adminToken") === token

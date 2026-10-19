@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./admin-style.css" />
   <link rel="stylesheet" href="./admin-friends.css?v=crew-1" />
   <link rel="stylesheet" href="./admin-transactions.css?v=ledger-admin-1" />
+  <link rel="stylesheet" href="./admin-player-record.css?v=stats-admin-1" />
 </head>
 <body class="admin-dashboard-body admin-dashboard-hidden">
   <header id="admin-taskbar">
@@ -201,17 +202,38 @@
 
           <div class="admin-selected-player-scroll">
             <section class="subpanel admin-general-info-panel">
-              <h3>General Info</h3>
+              <h3>Account Summary</h3>
               <div id="profileOutput" class="info-grid">
                 <div class="empty-state">No player loaded yet.</div>
               </div>
             </section>
 
-            <details class="admin-detail-accordion">
+            <details class="admin-detail-accordion" id="adminPlayerProfileAccordion">
               <summary>Profile</summary>
-              <div class="admin-accordion-body">
-                <h3>Segments</h3>
-                <div id="segmentsOutput" class="pill-list"></div>
+              <div class="admin-accordion-body admin-record-profile" id="playerProfileDetails">
+                <p class="empty-state">Select a player to read their profile.</p>
+              </div>
+            </details>
+
+            <details class="admin-detail-accordion" id="adminStatsAccordion" open>
+              <summary>Stats</summary>
+              <div class="admin-accordion-body admin-performance-panel" id="adminPerformancePanel" aria-busy="false">
+                <div class="admin-performance-toolbar">
+                  <div><h3>Construction Performance</h3><p id="adminStatsChecked">No player selected</p></div>
+                  <button type="button" id="adminStatsRefresh" disabled>Refresh stats</button>
+                </div>
+                <p class="admin-record-status" id="adminStatsStatus" role="status" aria-live="polite">Select a player to inspect saved performance.</p>
+                <div id="statsOutput"><p class="empty-state">No player loaded yet.</p></div>
+                <section class="admin-training-section" aria-labelledby="adminTrainingHeading">
+                  <h3 id="adminTrainingHeading">Training Progress</h3>
+                  <p class="admin-record-note">Individual game-reported flags, not an inferred overall completion score.</p>
+                  <div id="trainingOutput" class="admin-training-grid"><p class="empty-state">No player loaded yet.</p></div>
+                </section>
+                <details class="admin-raw-stats">
+                  <summary>Saved source values &amp; other statistics</summary>
+                  <p class="admin-record-note">Legacy values are preferred; Profile summaries are fallbacks and may lag. No values are added across sources. Raw source entries remain available here for inspection.</p>
+                  <div class="admin-raw-stats-wrap"><table class="admin-raw-stats-table"><caption>Selected player's saved statistics and profile-summary inputs</caption><thead><tr><th scope="col">Source</th><th scope="col">Key</th><th scope="col">Value</th></tr></thead><tbody id="adminStatsSources"><tr><td colspan="3">No player loaded yet.</td></tr></tbody></table></div>
+                </details>
               </div>
             </details>
 
@@ -273,15 +295,6 @@
                 <div class="admin-ledger-footer">
                   <p>Amounts are game currency, not real-money charges. Names use the current catalog; unavailable names fall back to item IDs. Nothing is charged, refunded, or granted here.</p>
                   <button type="button" id="adminLedgerMore" hidden>Load more</button>
-                </div>
-              </div>
-            </details>
-
-            <details class="admin-detail-accordion">
-              <summary>Stats</summary>
-              <div class="admin-accordion-body">
-                <div id="statsOutput" class="info-grid">
-                  <div class="empty-state">No player loaded yet.</div>
                 </div>
               </div>
             </details>
@@ -366,6 +379,7 @@
             <details class="admin-detail-accordion">
               <summary>Client Data</summary>
               <div class="admin-accordion-body">
+                <p class="admin-record-note">Other saved client data. Player bios and avatar are in Profile; performance fields and tutorial flags are in Stats. Only their display location has changed.</p>
                 <div id="userDataOutput" class="info-grid">
                   <div class="empty-state">No player loaded yet.</div>
                 </div>
@@ -379,8 +393,9 @@
     <button id="backToTopBtn" title="Go to top">&uarr;</button>
   </div>
 
+  <script src="./admin-player-record.js?v=stats-admin-1"></script>
   <script src="./admin-friends.js?v=crew-1"></script>
   <script src="./admin-transactions.js?v=ledger-admin-1"></script>
-  <script src="./admin-dashboard.js?v=ledger-admin-1"></script>
+  <script src="./admin-dashboard.js?v=stats-admin-1"></script>
 </body>
 </html>
